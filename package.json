@@ -5,7 +5,8 @@
     "main": "dist/jsfile-odf.js",
     "scripts": {
         "test": "./node_modules/.bin/grunt blobify && ./node_modules/.bin/karma start",
-        "build": "./node_modules/.bin/grunt build"
+        "build": "./node_modules/.bin/grunt build",
+        "preinstall": "npm install chai-json-schema"
     },
     "keywords": [],
     "devDependencies": {
@@ -22,7 +23,6 @@
         "jsfile": "*",
         "jsfile-schemas": "*",
         "mocha": "^2.2.5",
-        "chai-json-schema": "^1.2.0",
         "karma": "^0.13.8",
         "karma-chai": "^0.1.0",
         "karma-chrome-launcher": "^0.2.0",
