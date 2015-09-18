@@ -3,7 +3,7 @@ import parseStylesNode from './parseStylesNode';
 import parseParagraph from './parseParagraph';
 import parseList from './parseList';
 import parseTable from './parseTable';
-const {Document} = JsFile;
+const {Document, dom: $} = JsFile;
 const {errors, merge} = JsFile.Engine;
 
 const parsers = {
