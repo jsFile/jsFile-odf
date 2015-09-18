@@ -1,7 +1,7 @@
 import JsFile from 'JsFile';
 import getStyleRules from './getStyleRules';
 import parseParagraph from './parseParagraph';
-const {Document} = JsFile;
+const {Document, dom: $} = JsFile;
 const {merge} = JsFile.Engine;
 
 export default function (params) {
