@@ -58,7 +58,7 @@ function parseTableRow (params) {
     const push = arrProto.push;
     const map = arrProto.map;
     let result = Document.elementPrototype;
-    const {node, styles, documentData} = params;
+    const {node, styles, documentData, head} = params;
 
     result.properties.tagName = 'TR';
 
@@ -76,7 +76,7 @@ function parseTableRow (params) {
             merge(el, styles, styleRules.tableCell);
         }
 
-        el.properties.tagName = header ? 'TH' : 'TD';
+        el.properties.tagName = head ? 'TH' : 'TD';
         push.apply(el.children, map.call(node.querySelectorAll('p'), (node) => {
             return parseParagraph({
                 node,
