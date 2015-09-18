@@ -57,7 +57,7 @@ export default function (params) {
             case 'frame':
                 let size;
 
-                attrValue = node.attributes['svg:x'] && options.node.attributes['svg:x'].value;
+                attrValue = node.attributes['svg:x'] && node.attributes['svg:x'].value;
                 if (attrValue) {
                     size = getSize(attrValue);
 
@@ -67,7 +67,7 @@ export default function (params) {
                     }
                 }
 
-                attrValue = node.attributes['svg:y'] && options.node.attributes['svg:y'].value;
+                attrValue = node.attributes['svg:y'] && node.attributes['svg:y'].value;
                 if (attrValue) {
                     size = getSize(attrValue);
 
@@ -77,7 +77,7 @@ export default function (params) {
                     }
                 }
 
-                attrValue = node.attributes['svg:width'] && options.node.attributes['svg:width'].value;
+                attrValue = node.attributes['svg:width'] && node.attributes['svg:width'].value;
                 if (attrValue) {
                     size = getSize(attrValue);
 
@@ -86,7 +86,7 @@ export default function (params) {
                     }
                 }
 
-                attrValue = node.attributes['svg:height'] && options.node.attributes['svg:height'].value;
+                attrValue = node.attributes['svg:height'] && node.attributes['svg:height'].value;
                 if (attrValue) {
                     size = getSize(attrValue);
 
@@ -95,12 +95,12 @@ export default function (params) {
                     }
                 }
 
-                attrValue = node.attributes['draw:z-index'] && options.node.attributes['draw:z-index'].value;
+                attrValue = node.attributes['draw:z-index'] && node.attributes['draw:z-index'].value;
                 if (!isNaN(attrValue)) {
                     el.style.zIndex = Number(attrValue);
                 }
 
-                attrValue = node.attributes['draw:style-name'] && options.node.attributes['draw:style-name'].value;
+                attrValue = node.attributes['draw:style-name'] && node.attributes['draw:style-name'].value;
                 if (attrValue) {
                     el.properties.styleName = attrValue;
                 }
