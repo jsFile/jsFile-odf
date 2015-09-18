@@ -19,7 +19,8 @@ function readNodes (i, length, nodes, result, resolve, reject) {
 
     for (; i < size; i++) {
         let attrValue;
-        const {localName, attributes} = nodes[i];
+        const node = nodes[i];
+        const {localName, attributes} = node;
 
         if (localName === 'style' || localName === defaultStyleNodeName) {
             let namedStyle;
