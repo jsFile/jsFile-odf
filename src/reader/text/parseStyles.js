@@ -1,4 +1,3 @@
-import {dom as $} from 'JsFile';
 import parsePageLayoutStyles from './parsePageLayoutStyles';
 import parseStylesNode from './parseStylesNode';
 
@@ -17,8 +16,8 @@ export default xml => new Promise((resolve, reject) => {
         defaults: {}
     };
     let firstPageLayout = '';
-
-    $.children(xml.querySelector('master-styles')).forEach(({localName, attributes}) => {
+    let node = xml.querySelector('master-styles');
+    [].forEach.call(node && node.childNodes || [], ({localName, attributes}) => {
         if (localName === 'master-page') {
             const attrValue = attributes['style:page-layout-name'] && attributes['style:page-layout-name'].value;
             if (attrValue) {
@@ -27,7 +26,8 @@ export default xml => new Promise((resolve, reject) => {
         }
     });
 
-    $.children(xml.querySelector('automatic-styles')).forEach(({localName, attributes}) => {
+    node = xml.querySelector('automatic-styles');
+    [].forEach.call(node && node.childNodes || [], ({localName, attributes}) => {
         if (localName === 'page-layout') {
             const attrValue = attributes['style:name'] && attributes['style:name'].value;
             if (attrValue) {

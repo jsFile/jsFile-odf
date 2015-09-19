@@ -363,7 +363,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var $ = _JsFile2['default'].dom;
 	var formatPropertyName = _JsFile2['default'].Engine.formatPropertyName;
 
 	exports['default'] = function (xml) {
@@ -371,8 +370,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        documentInfo: {},
 	        appInfo: {}
 	    };
+	    var node = xml.querySelector('meta');
 
-	    $.children(xml.querySelector('meta')).forEach(function (_ref) {
+	    [].forEach.call(node && node.childNodes || [], function (_ref) {
 	        var textContent = _ref.textContent;
 	        var localName = _ref.localName;
 	        var attributes = _ref.attributes;
@@ -432,8 +432,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _JsFile = __webpack_require__(1);
-
 	var _parsePageLayoutStyles = __webpack_require__(6);
 
 	var _parsePageLayoutStyles2 = _interopRequireDefault(_parsePageLayoutStyles);
@@ -459,8 +457,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            defaults: {}
 	        };
 	        var firstPageLayout = '';
-
-	        _JsFile.dom.children(xml.querySelector('master-styles')).forEach(function (_ref) {
+	        var node = xml.querySelector('master-styles');
+	        [].forEach.call(node && node.childNodes || [], function (_ref) {
 	            var localName = _ref.localName;
 	            var attributes = _ref.attributes;
 
@@ -472,7 +470,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 
-	        _JsFile.dom.children(xml.querySelector('automatic-styles')).forEach(function (_ref2) {
+	        node = xml.querySelector('automatic-styles');
+	        [].forEach.call(node && node.childNodes || [], function (_ref2) {
 	            var localName = _ref2.localName;
 	            var attributes = _ref2.attributes;
 
@@ -598,12 +597,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (size && size.unit) {
 	                    result.page.properties[prop] = size;
 	                } else {
+	                    if (/color$/i.test(prop) && value) {
+	                        value = value.toUpperCase();
+	                    }
+
 	                    result.page.properties[prop] = value;
 	                }
 	            }
 	        });
 
-	        $.children(node).forEach(function (node) {
+	        [].forEach.call(node && node.childNodes || [], function (node) {
 	            if (node.localName === 'footnote-sep') {
 	                var attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
 	                var size = attrValue && (0, _getSize2['default'])(attrValue);
@@ -733,7 +736,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseTextStyles2 = _interopRequireDefault(_parseTextStyles);
 
-	var $ = _JsFile2['default'].dom;
 	var merge = _JsFile2['default'].Engine.merge;
 
 	var defaultStyleNodeName = 'default-style';
@@ -747,9 +749,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    for (; i < size; i++) {
 	        var attrValue = undefined;
-	        var _nodes$i = nodes[i];
-	        var localName = _nodes$i.localName;
-	        var attributes = _nodes$i.attributes;
+	        var node = nodes[i];
+	        var localName = node.localName;
+	        var attributes = node.attributes;
 
 	        if (localName === 'style' || localName === defaultStyleNodeName) {
 	            var namedStyle = undefined;
@@ -797,7 +799,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = function (node) {
 	    return new Promise(function (resolve, reject) {
-	        var nodes = $.children(node);
+	        var nodes = node && node.childNodes || [];
 
 	        readNodes(0, nodes.length, nodes, {
 	            named: {}
@@ -809,16 +811,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
-
-	var _JsFile = __webpack_require__(1);
-
 	var listStyleTypes = {
 	    1: 'decimal',
 	    i: 'lower-roman',
@@ -831,7 +830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var result = {
 	        style: {}
 	    };
-	    var nodes = _JsFile.dom.children(xml);
+	    var nodes = xml && xml.childNodes || [];
 	    var i = nodes.length;
 
 	    while (i--) {
@@ -1286,7 +1285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (node) {
 	            (0, _parseStylesNode2['default'])(xml.querySelector('automatic-styles')).then(function (styles) {
 	                var page = merge(pageLayout && pageLayout.page || {}, Document.elementPrototype);
-	                $.children(node).forEach(function (node) {
+	                [].forEach.call(node && node.childNodes || [], function (node) {
 	                    var parser = parsers[node.localName];
 
 	                    if (parser) {
@@ -1340,7 +1339,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getSize2 = _interopRequireDefault(_getSize);
 
-	var $ = _JsFile2['default'].dom;
 	var Document = _JsFile2['default'].Document;
 	var _JsFile$Engine = _JsFile2['default'].Engine;
 	var tabAsSpaces = _JsFile$Engine.tabAsSpaces;
@@ -1356,6 +1354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return result;
 	    }
 
+	    var children = node && node.childNodes || [];
 	    var styleRules = undefined;
 	    var attrValue = node.attributes['text:style-name'] && node.attributes['text:style-name'].value;
 	    if (attrValue) {
@@ -1369,7 +1368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        merge(result, styleRules.paragraph);
 	    }
 
-	    $.children(node).forEach(function (node) {
+	    [].forEach.call(children, function (node) {
 	        var attrValue = undefined;
 	        var el = merge(Document.elementPrototype, styleRules && styleRules.text);
 
@@ -1392,7 +1391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }).text);
 	                }
 
-	                $.children(node).forEach(function (node) {
+	                [].forEach.call(node && node.childNodes || [], function (node) {
 	                    el.properties.textContent += node.textContent || '';
 	                });
 
@@ -1401,7 +1400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case 'frame':
 	                var size = undefined;
 
-	                attrValue = node.attributes['svg:x'] && options.node.attributes['svg:x'].value;
+	                attrValue = node.attributes['svg:x'] && node.attributes['svg:x'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1411,7 +1410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['svg:y'] && options.node.attributes['svg:y'].value;
+	                attrValue = node.attributes['svg:y'] && node.attributes['svg:y'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1421,7 +1420,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['svg:width'] && options.node.attributes['svg:width'].value;
+	                attrValue = node.attributes['svg:width'] && node.attributes['svg:width'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1430,7 +1429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['svg:height'] && options.node.attributes['svg:height'].value;
+	                attrValue = node.attributes['svg:height'] && node.attributes['svg:height'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1439,12 +1438,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['draw:z-index'] && options.node.attributes['draw:z-index'].value;
+	                attrValue = node.attributes['draw:z-index'] && node.attributes['draw:z-index'].value;
 	                if (!isNaN(attrValue)) {
 	                    el.style.zIndex = Number(attrValue);
 	                }
 
-	                attrValue = node.attributes['draw:style-name'] && options.node.attributes['draw:style-name'].value;
+	                attrValue = node.attributes['draw:style-name'] && node.attributes['draw:style-name'].value;
 	                if (attrValue) {
 	                    el.properties.styleName = attrValue;
 	                }
@@ -1464,6 +1463,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                result.children.push(el);
 	        }
 	    });
+
+	    if (!children[0] && node.textContent) {
+	        var el = Document.elementPrototype;
+	        el.properties.tagName = 'SPAN';
+	        el.properties.textContent = node.textContent;
+	        result.children.push(el);
+	    }
 
 	    return result;
 	};
@@ -1661,7 +1667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }).table);
 	    }
 
-	    $.children(node).forEach(function (node) {
+	    [].forEach.call(node && node.childNodes || [], function (node) {
 	        var localName = node.localName;
 
 	        if (localName === 'table-row') {
@@ -1695,6 +1701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var node = params.node;
 	    var styles = params.styles;
 	    var documentData = params.documentData;
+	    var head = params.head;
 
 	    result.properties.tagName = 'TR';
 
@@ -1712,7 +1719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            merge(el, styles, styleRules.tableCell);
 	        }
 
-	        el.properties.tagName = header ? 'TH' : 'TD';
+	        el.properties.tagName = head ? 'TH' : 'TD';
 	        push.apply(el.children, map.call(node.querySelectorAll('p'), function (node) {
 	            return (0, _parseParagraph2['default'])({
 	                node: node,

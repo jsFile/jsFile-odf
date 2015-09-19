@@ -1,5 +1,3 @@
-import {dom as $} from 'JsFile';
-
 const listStyleTypes = {
     1: 'decimal',
     i: 'lower-roman',
@@ -12,7 +10,7 @@ export default function (xml) {
     const result = {
         style: {}
     };
-    const nodes = $.children(xml);
+    const nodes = xml && xml.childNodes || [];
     let i = nodes.length;
 
     while (i--) {

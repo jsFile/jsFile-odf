@@ -3,7 +3,7 @@ import parseStylesNode from './parseStylesNode';
 import parseParagraph from './parseParagraph';
 import parseList from './parseList';
 import parseTable from './parseTable';
-const {Document, dom: $} = JsFile;
+const {Document} = JsFile;
 const {errors, merge} = JsFile.Engine;
 
 const parsers = {
@@ -30,7 +30,7 @@ export default function (params) {
         if (node) {
             parseStylesNode(xml.querySelector('automatic-styles')).then(styles => {
                 let page = merge(pageLayout && pageLayout.page || {}, Document.elementPrototype);
-                $.children(node).forEach(node => {
+                [].forEach.call(node && node.childNodes || [], (node) => {
                     let parser = parsers[node.localName];
 
                     if (parser) {

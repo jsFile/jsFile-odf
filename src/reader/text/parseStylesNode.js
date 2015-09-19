@@ -5,9 +5,7 @@ import parseTableColumnStyles from './parseTableColumnStyles';
 import parseTableCellStyles from './parseTableCellStyles';
 import parseParagraphStyles from './parseParagraphStyles';
 import parseTextStyles from './parseTextStyles';
-const {dom: $} = JsFile;
 const {merge} = JsFile.Engine;
-
 const defaultStyleNodeName = 'default-style';
 
 function readNodes (i, length, nodes, result, resolve, reject) {
@@ -66,7 +64,7 @@ function readNodes (i, length, nodes, result, resolve, reject) {
 
 export default function (node) {
     return new Promise((resolve, reject) => {
-        const nodes = $.children(node);
+        const nodes = node && node.childNodes || [];
 
         readNodes(0, nodes.length, nodes, {
             named: {}

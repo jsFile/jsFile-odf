@@ -33,7 +33,7 @@ export default function (node) {
     if (node) {
         Array.prototype.forEach.call(node.attributes || [], attr => {
             let size;
-            const {value = '', name = ''} = attr;
+            let {value = '', name = ''} = attr;
             const prop = name && formatPropertyName(name);
 
             if (prop.includes('padding') || prop.includes('margin')) {
@@ -70,12 +70,16 @@ export default function (node) {
                 if (size && size.unit) {
                     result.page.properties[prop] = size;
                 } else {
+                    if (/color$/i.test(prop) && value) {
+                        value = value.toUpperCase();
+                    }
+
                     result.page.properties[prop] = value;
                 }
             }
         });
 
-        $.children(node).forEach(node => {
+        [].forEach.call(node && node.childNodes || [], (node) => {
             if (node.localName === 'footnote-sep') {
                 let attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
                 let size = attrValue && getSize(attrValue);

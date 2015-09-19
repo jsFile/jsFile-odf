@@ -20,25 +20,31 @@ describe('jsFile-odf', () => {
     });
 
     it('should read the file', function () {
-        this.timeout(15000);
+        this.timeout(50000);
         const queue = [];
         let name;
         for (name in files) {
             if (files.hasOwnProperty(name)) {
-                const jf = new JsFile(files[name], {
-                    workerPath: '/base/dist/workers/'
-                });
-                const promise = jf.read().then(done, done);
+                (function (file, name) {
+                    const jf = new JsFile(file, {
+                        workerPath: '/base/dist/workers/'
+                    });
+                    const promise = jf.read().then(done, done);
+                    queue.push(promise);
 
-                queue.push(promise);
+                    function done (result) {
+                        assert.instanceOf(result, JsFile.Document, name);
+                        const json = result.json();
+                        const html = result.html();
+                        const text = html.textContent || '';
+                        assert.jsonSchema(json, documentSchema, name);
+                        assert.notEqual(text.length, 0, 'File ' + name + 'shouldn\'t be empty');
 
-                function done (result) {
-                    assert.instanceOf(result, JsFile.Document, name);
-                    const json = result.json();
-                    assert.jsonSchema(json, documentSchema, name);
-                    const isEmpty = !/textContent":"[^"]+"/.test(JSON.stringify(json));
-                    assert.isFalse(isEmpty, 'File ' + name + 'shouldn\'t be empty');
-                }
+                        if (/MetaData/.test(name)) {
+                            assert.isTrue(/Metadata Examples, 22 Aug 2007/.test(text), 'should parse h1');
+                        }
+                    }
+                }(files[name], name));
             }
         }
 

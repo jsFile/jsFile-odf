@@ -1,5 +1,4 @@
 import JsFile from 'JsFile';
-const {dom: $} = JsFile;
 const {formatPropertyName} = JsFile.Engine;
 
 export default function (xml) {
@@ -7,8 +6,9 @@ export default function (xml) {
         documentInfo: {},
         appInfo: {}
     };
+    const node = xml.querySelector('meta');
 
-    $.children(xml.querySelector('meta')).forEach(({textContent, localName, attributes}) => {
+    [].forEach.call(node && node.childNodes || [], ({textContent, localName, attributes}) => {
         switch (localName) {
             case 'initial-creator':
             case 'creator':

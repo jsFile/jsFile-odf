@@ -1,7 +1,7 @@
 import JsFile from 'JsFile';
 import getStyleRules from './getStyleRules';
 import getSize from './getSize';
-const {dom: $, Document} = JsFile;
+const {Document} = JsFile;
 const {tabAsSpaces, merge} = JsFile.Engine;
 
 export default function (params) {
@@ -12,6 +12,7 @@ export default function (params) {
         return result;
     }
 
+    const children = node && node.childNodes || [];
     let styleRules;
     let attrValue = node.attributes['text:style-name'] && node.attributes['text:style-name'].value;
     if (attrValue) {
@@ -25,9 +26,9 @@ export default function (params) {
         merge(result, styleRules.paragraph);
     }
 
-    $.children(node).forEach(node => {
+    [].forEach.call(children, (node) => {
         let attrValue;
-        let el = merge(Document.elementPrototype, styleRules && styleRules.text);
+        const el = merge(Document.elementPrototype, styleRules && styleRules.text);
 
         switch (node.localName) {
             case 'tab':
@@ -48,7 +49,7 @@ export default function (params) {
                     }).text);
                 }
 
-                $.children(node).forEach(node => {
+                [].forEach.call(node && node.childNodes || [], (node) => {
                     el.properties.textContent += node.textContent || '';
                 });
 
@@ -120,6 +121,13 @@ export default function (params) {
                 result.children.push(el);
         }
     });
+
+    if (!children[0] && node.textContent) {
+        let el = Document.elementPrototype;
+        el.properties.tagName = 'SPAN';
+        el.properties.textContent = node.textContent;
+        result.children.push(el);
+    }
 
     return result;
 }

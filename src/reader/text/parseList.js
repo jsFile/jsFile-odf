@@ -14,8 +14,8 @@ export default function (params) {
         return result;
     }
 
-    let attrValue;
     const arrProto = Array.prototype;
+    let attrValue;
     let push = arrProto.push;
     let map = arrProto.map;
 

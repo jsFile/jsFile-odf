@@ -1,7 +1,7 @@
 import JsFile from 'JsFile';
 import getStyleRules from './getStyleRules';
 import parseParagraph from './parseParagraph';
-const {Document, dom: $} = JsFile;
+const {Document} = JsFile;
 const {merge} = JsFile.Engine;
 
 export default function (params) {
@@ -27,7 +27,7 @@ export default function (params) {
         }).table);
     }
 
-    $.children(node).forEach((node) => {
+    [].forEach.call(node && node.childNodes || [], (node) => {
         const localName = node.localName;
 
         if (localName === 'table-row') {
