@@ -1574,8 +1574,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return result;
 	    }
 
-	    var attrValue = undefined;
 	    var arrProto = Array.prototype;
+	    var attrValue = undefined;
 	    var push = arrProto.push;
 	    var map = arrProto.map;
 
