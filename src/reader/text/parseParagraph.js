@@ -1,5 +1,4 @@
 import JsFile from 'JsFile';
-import getStyleRules from './getStyleRules';
 import getSize from './getSize';
 const {Document} = JsFile;
 const {tabAsSpaces, merge} = JsFile.Engine;
@@ -7,28 +6,17 @@ const {tabAsSpaces, merge} = JsFile.Engine;
 export default function (params) {
     let result = Document.elementPrototype;
     const {node, styles, documentData} = params;
+    result.properties.tagName = 'P';
 
     if (!node) {
         return result;
     }
 
-    const children = node && node.childNodes || [];
-    let styleRules;
-    let attrValue = node.attributes['text:style-name'] && node.attributes['text:style-name'].value;
-    if (attrValue) {
-        styleRules  = getStyleRules({
-            documentData,
-            styles,
-            styleName: attrValue,
-            children: ['paragraph', 'text']
-        });
-
-        merge(result, styleRules.paragraph);
-    }
-
-    [].forEach.call(children, (node) => {
+    result.properties.className = node.attributes['text:style-name'] && node.attributes['text:style-name'].value || '';
+    [].forEach.call(node && node.childNodes || [], (node) => {
         let attrValue;
-        const el = merge(Document.elementPrototype, styleRules && styleRules.text);
+        const el = Document.elementPrototype;
+        el.properties.tagName = 'SPAN';
 
         switch (node.localName) {
             case 'tab':
@@ -39,15 +27,8 @@ export default function (params) {
                 result.properties.pageBreak = true;
                 break;
             case 'span':
-                attrValue = node.attributes['text:style-name'] && params.node.attributes['text:style-name'].value;
-                if (attrValue) {
-                    merge(result, getStyleRules({
-                        documentData,
-                        styles,
-                        styleName: attrValue,
-                        children: ['text']
-                    }).text);
-                }
+                attrValue = node.attributes['text:style-name'] && params.node.attributes['text:style-name'].value || '';
+                el.properties.className = attrValue;
 
                 [].forEach.call(node && node.childNodes || [], (node) => {
                     el.properties.textContent += node.textContent || '';
@@ -121,13 +102,6 @@ export default function (params) {
                 result.children.push(el);
         }
     });
-
-    if (!children[0] && node.textContent) {
-        let el = Document.elementPrototype;
-        el.properties.tagName = 'SPAN';
-        el.properties.textContent = node.textContent;
-        result.children.push(el);
-    }
 
     return result;
 }

@@ -266,6 +266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseDocumentContent2 = _interopRequireDefault(_parseDocumentContent);
 
+	var Document = _JsFile2['default'].Document;
 	var normalizeDataUri = _JsFile2['default'].Engine.normalizeDataUri;
 
 	/**
@@ -338,7 +339,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                xml: document,
 	                documentData: documentData,
 	                fileName: this.fileName
-	            }).then(resolve, reject);
+	            }).then(function (result) {
+	                resolve(new Document(result));
+	            }, reject);
 
 	            documentData = document = null;
 	        }).bind(this), reject);
@@ -440,6 +443,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseStylesNode2 = _interopRequireDefault(_parseStylesNode);
 
+	var tags = {
+	    paragraph: 'p'
+	};
+
 	/**
 	 *
 	 * @param xml
@@ -493,6 +500,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        (0, _parseStylesNode2['default'])(xml.querySelector('styles')).then(function (styles) {
 	            result.defaults = styles;
+	            result.computed = [];
+	            for (var k in styles) {
+	                if (styles.hasOwnProperty(k)) {
+	                    var item = styles[k];
+	                    if (k === 'named') {
+	                        for (var i in item) {
+	                            if (item.hasOwnProperty(i)) {
+	                                result.computed.push({
+	                                    selector: '.' + i,
+	                                    rules: item[i].style
+	                                });
+	                            }
+	                        }
+	                    } else {
+	                        result.computed.push({
+	                            selector: tags[k] || k,
+	                            rules: item.style
+	                        });
+	                    }
+	                }
+	            }
+
 	            resolve(result);
 	        }, reject);
 	    });
@@ -1245,11 +1274,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
-	var _parseList = __webpack_require__(19);
+	var _parseList = __webpack_require__(18);
 
 	var _parseList2 = _interopRequireDefault(_parseList);
 
-	var _parseTable = __webpack_require__(20);
+	var _parseTable = __webpack_require__(19);
 
 	var _parseTable2 = _interopRequireDefault(_parseTable);
 
@@ -1278,7 +1307,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var result = {
 	            name: fileName,
 	            wordsCount: documentData.documentInfo && documentData.documentInfo.wordsCount || null,
-	            pages: []
+	            content: [],
+	            styles: documentData.styles.computed
 	        };
 	        var pageLayout = documentData.styles && documentData.styles.automatic && documentData.styles.automatic.layouts && documentData.styles.automatic.layouts[documentData.styles.pageLayout];
 	        var node = xml.querySelector('body text');
@@ -1296,7 +1326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        });
 
 	                        if (el.properties.pageBreak) {
-	                            result.pages.push(page);
+	                            result.content.push(page);
 	                            page = merge(pageLayout && pageLayout.page || {}, Document.elementPrototype);
 	                        }
 
@@ -1304,11 +1334,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                });
 
-	                result.pages.push(page);
-	                resolve(new Document(result));
+	                result.content.push(page);
+	                resolve(result);
 	            }, reject);
 	        } else {
-	            resolve(new Document(result));
+	            resolve(result);
 	        }
 	    });
 	};
@@ -1331,10 +1361,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _getStyleRules = __webpack_require__(18);
-
-	var _getStyleRules2 = _interopRequireDefault(_getStyleRules);
-
 	var _getSize = __webpack_require__(7);
 
 	var _getSize2 = _interopRequireDefault(_getSize);
@@ -1350,27 +1376,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var styles = params.styles;
 	    var documentData = params.documentData;
 
+	    result.properties.tagName = 'P';
+
 	    if (!node) {
 	        return result;
 	    }
 
-	    var children = node && node.childNodes || [];
-	    var styleRules = undefined;
-	    var attrValue = node.attributes['text:style-name'] && node.attributes['text:style-name'].value;
-	    if (attrValue) {
-	        styleRules = (0, _getStyleRules2['default'])({
-	            documentData: documentData,
-	            styles: styles,
-	            styleName: attrValue,
-	            children: ['paragraph', 'text']
-	        });
-
-	        merge(result, styleRules.paragraph);
-	    }
-
-	    [].forEach.call(children, function (node) {
+	    result.properties.className = node.attributes['text:style-name'] && node.attributes['text:style-name'].value || '';
+	    [].forEach.call(node && node.childNodes || [], function (node) {
 	        var attrValue = undefined;
-	        var el = merge(Document.elementPrototype, styleRules && styleRules.text);
+	        var el = Document.elementPrototype;
+	        el.properties.tagName = 'SPAN';
 
 	        switch (node.localName) {
 	            case 'tab':
@@ -1381,15 +1397,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                result.properties.pageBreak = true;
 	                break;
 	            case 'span':
-	                attrValue = node.attributes['text:style-name'] && params.node.attributes['text:style-name'].value;
-	                if (attrValue) {
-	                    merge(result, (0, _getStyleRules2['default'])({
-	                        documentData: documentData,
-	                        styles: styles,
-	                        styleName: attrValue,
-	                        children: ['text']
-	                    }).text);
-	                }
+	                attrValue = node.attributes['text:style-name'] && params.node.attributes['text:style-name'].value || '';
+	                el.properties.className = attrValue;
 
 	                [].forEach.call(node && node.childNodes || [], function (node) {
 	                    el.properties.textContent += node.textContent || '';
@@ -1464,13 +1473,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    });
 
-	    if (!children[0] && node.textContent) {
-	        var el = Document.elementPrototype;
-	        el.properties.tagName = 'SPAN';
-	        el.properties.textContent = node.textContent;
-	        result.children.push(el);
-	    }
-
 	    return result;
 	};
 
@@ -1492,69 +1494,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _JsFile$Engine = _JsFile2['default'].Engine;
-	var clone = _JsFile$Engine.clone;
-	var merge = _JsFile$Engine.merge;
-
-	exports['default'] = function (params) {
-	    var result = {};
-	    var _params$children = params.children;
-	    var children = _params$children === undefined ? [] : _params$children;
-	    var _params$documentData = params.documentData;
-	    var documentData = _params$documentData === undefined ? {} : _params$documentData;
-	    var styleName = params.styleName;
-	    var _params$styles = params.styles;
-	    var styles = _params$styles === undefined ? {} : _params$styles;
-
-	    children.forEach(function (dest) {
-	        result[dest] = {
-	            style: {}
-	        };
-
-	        if (documentData.styles && documentData.styles.defaults) {
-	            if (documentData.styles.defaults[dest]) {
-	                result[dest].style = clone(documentData.styles.defaults[dest].style);
-	            }
-
-	            if (documentData.styles.defaults.named && documentData.styles.defaults.named[styleName] && documentData.styles.defaults.named[styleName][dest]) {
-	                merge(result[dest].style, documentData.styles.defaults.named[styleName][dest].style);
-	            }
-	        }
-
-	        if (styles && styles[dest]) {
-	            merge(result[dest].style, styles[dest].style);
-	        }
-
-	        if (styles && styles.named && styles.named[styleName] && styles.named[styleName][dest]) {
-	            merge(result[dest].style, styles.named[styleName][dest].style);
-	        }
-	    });
-
-	    return result;
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _JsFile = __webpack_require__(1);
-
-	var _JsFile2 = _interopRequireDefault(_JsFile);
-
-	var _getStyleRules = __webpack_require__(18);
-
-	var _getStyleRules2 = _interopRequireDefault(_getStyleRules);
-
 	var _parseParagraph = __webpack_require__(17);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
@@ -1575,25 +1514,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var arrProto = Array.prototype;
-	    var attrValue = undefined;
 	    var push = arrProto.push;
 	    var map = arrProto.map;
-
-	    attrValue = node.attributes['xml:id'] && node.attributes['xml:id'].value;
+	    var attrValue = node.attributes['xml:id'] && node.attributes['xml:id'].value;
 	    if (attrValue) {
 	        result.properties.id = attrValue;
 	    }
 
-	    attrValue = node.attributes['text:style-name'] && node.attributes['text:style-name'].value;
-	    if (attrValue) {
-	        merge(result, (0, _getStyleRules2['default'])({
-	            documentData: documentData,
-	            styles: styles,
-	            styleName: attrValue,
-	            children: ['list']
-	        }).list);
-	    }
-
+	    result.properties.className = node.attributes['text:style-name'] && node.attributes['text:style-name'].value || '';
 	    push.apply(result.children, map.call(node.querySelectorAll('list-item'), function (node) {
 	        var el = Document.elementPrototype;
 	        el.properties.tagName = 'LI';
@@ -1615,7 +1543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1629,10 +1557,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
-
-	var _getStyleRules = __webpack_require__(18);
-
-	var _getStyleRules2 = _interopRequireDefault(_getStyleRules);
 
 	var _parseParagraph = __webpack_require__(17);
 
@@ -1657,15 +1581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    result.properties.tagName = 'TABLE';
 	    thead.properties.tagName = 'THEAD';
 	    tbody.properties.tagName = 'TBODY';
-	    attrValue = node.attributes['table:style-name'] && node.attributes['table:style-name'].value;
-	    if (attrValue) {
-	        merge(result, (0, _getStyleRules2['default'])({
-	            documentData: documentData,
-	            styles: styles,
-	            styleName: attrValue,
-	            children: ['table']
-	        }).table);
-	    }
+	    result.properties.className = node.attributes['table:style-name'] && node.attributes['table:style-name'].value || '';
 
 	    [].forEach.call(node && node.childNodes || [], function (node) {
 	        var localName = node.localName;
@@ -1704,21 +1620,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var head = params.head;
 
 	    result.properties.tagName = 'TR';
-
 	    push.apply(result.children, map.call(node.querySelectorAll('table-cell'), function (node) {
 	        var el = Document.elementPrototype;
-	        var attrValue = node.attributes['table:style-name'] && node.attributes['table:style-name'].value;
-
-	        if (attrValue) {
-	            var styleRules = (0, _getStyleRules2['default'])({
-	                documentData: documentData,
-	                styles: styles,
-	                styleName: attrValue,
-	                children: ['tableCell']
-	            });
-	            merge(el, styles, styleRules.tableCell);
-	        }
-
+	        el.properties.className = node.attributes['table:style-name'] && node.attributes['table:style-name'].value || '';
 	        el.properties.tagName = head ? 'TH' : 'TD';
 	        push.apply(el.children, map.call(node.querySelectorAll('p'), function (node) {
 	            return (0, _parseParagraph2['default'])({

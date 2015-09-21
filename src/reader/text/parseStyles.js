@@ -1,6 +1,10 @@
 import parsePageLayoutStyles from './parsePageLayoutStyles';
 import parseStylesNode from './parseStylesNode';
 
+const tags = {
+    paragraph: 'p'
+};
+
 /**
  *
  * @param xml
@@ -46,6 +50,28 @@ export default xml => new Promise((resolve, reject) => {
 
     parseStylesNode(xml.querySelector('styles')).then(styles => {
         result.defaults = styles;
+        result.computed = [];
+        for (let k in styles) {
+            if (styles.hasOwnProperty(k)) {
+                const item = styles[k];
+                if (k === 'named') {
+                    for (let i in item) {
+                        if (item.hasOwnProperty(i)) {
+                            result.computed.push({
+                                selector: `.${i}`,
+                                rules: item[i].style
+                            });
+                        }
+                    }
+                } else {
+                    result.computed.push({
+                        selector: tags[k] || k,
+                        rules: item.style
+                    });
+                }
+            }
+        }
+
         resolve(result);
     }, reject);
 });

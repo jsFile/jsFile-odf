@@ -22,7 +22,8 @@ export default function (params) {
         let result = {
             name: fileName,
             wordsCount: (documentData.documentInfo && documentData.documentInfo.wordsCount) || null,
-            pages: []
+            content: [],
+            styles: documentData.styles.computed
         };
         const pageLayout = documentData.styles && documentData.styles.automatic &&  documentData.styles.automatic.layouts &&
             documentData.styles.automatic.layouts[documentData.styles.pageLayout];
@@ -41,7 +42,7 @@ export default function (params) {
                         });
 
                         if (el.properties.pageBreak) {
-                            result.pages.push(page);
+                            result.content.push(page);
                             page = merge(pageLayout && pageLayout.page || {}, Document.elementPrototype);
                         }
 
@@ -49,11 +50,11 @@ export default function (params) {
                     }
                 });
 
-                result.pages.push(page);
-                resolve(new Document(result));
+                result.content.push(page);
+                resolve(result);
             }, reject);
         } else {
-            resolve(new Document(result));
+            resolve(result);
         }
     });
 }

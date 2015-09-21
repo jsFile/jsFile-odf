@@ -1,5 +1,4 @@
 import JsFile from 'JsFile';
-import getStyleRules from './getStyleRules';
 import parseParagraph from './parseParagraph';
 const {Document} = JsFile;
 const {merge} = JsFile.Engine;
@@ -17,15 +16,7 @@ export default function (params) {
     result.properties.tagName = 'TABLE';
     thead.properties.tagName = 'THEAD';
     tbody.properties.tagName = 'TBODY';
-    attrValue = node.attributes['table:style-name'] && node.attributes['table:style-name'].value;
-    if (attrValue) {
-        merge(result, getStyleRules({
-            documentData,
-            styles,
-            styleName: attrValue,
-            children: ['table']
-        }).table);
-    }
+    result.properties.className = node.attributes['table:style-name'] && node.attributes['table:style-name'].value || '';
 
     [].forEach.call(node && node.childNodes || [], (node) => {
         const localName = node.localName;
@@ -59,23 +50,10 @@ function parseTableRow (params) {
     const map = arrProto.map;
     let result = Document.elementPrototype;
     const {node, styles, documentData, head} = params;
-
     result.properties.tagName = 'TR';
-
     push.apply(result.children, map.call(node.querySelectorAll('table-cell'), (node) => {
         let el = Document.elementPrototype;
-        const attrValue = node.attributes['table:style-name'] && node.attributes['table:style-name'].value;
-
-        if (attrValue) {
-            const styleRules = getStyleRules({
-                documentData,
-                styles,
-                styleName: attrValue,
-                children: ['tableCell']
-            });
-            merge(el, styles, styleRules.tableCell);
-        }
-
+        el.properties.className = node.attributes['table:style-name'] && node.attributes['table:style-name'].value || '';
         el.properties.tagName = head ? 'TH' : 'TD';
         push.apply(el.children, map.call(node.querySelectorAll('p'), (node) => {
             return parseParagraph({

@@ -2,6 +2,7 @@ import JsFile from 'JsFile';
 import parseMetaInformation from './parseMetaInformation';
 import parseStyles from './parseStyles';
 import parseDocumentContent from './parseDocumentContent';
+const {Document} = JsFile;
 const {normalizeDataUri} = JsFile.Engine;
 
 /**
@@ -69,7 +70,9 @@ export default function (filesEntry) {
                 xml: document,
                 documentData,
                 fileName: this.fileName
-            }).then(resolve, reject);
+            }).then((result) => {
+                resolve(new Document(result));
+            }, reject);
 
             documentData = document = null;
         }.bind(this), reject);
