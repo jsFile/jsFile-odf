@@ -50,7 +50,7 @@ export default function (filesEntry) {
                         xml = domParser.parseFromString(result, 'application/xml');
 
                         if (filename.includes('styles.')) {
-                            parseStyles(xml).then(styles => documentData.styles = styles, reject);
+                            parseStyles(xml).then((styles) => documentData.styles = styles, reject);
                         } else if (filename.includes('meta.')) {
                             let info = parseMetaInformation(xml);
                             documentData.documentInfo = info.documentInfo;

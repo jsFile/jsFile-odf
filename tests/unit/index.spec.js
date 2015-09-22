@@ -37,8 +37,8 @@ describe('jsFile-odf', () => {
                         const json = result.json();
                         const html = result.html();
                         const text = html.textContent || '';
-                        assert.jsonSchema(json, documentSchema, name);
-                        assert.notEqual(text.length, 0, 'File ' + name + 'shouldn\'t be empty');
+                        assert.jsonSchema(json.content, documentSchema, name);
+                        assert.notEqual(text.length, 0, `File ${name} shouldn't be empty`);
 
                         if (/MetaData/.test(name)) {
                             assert.isTrue(/Metadata Examples, 22 Aug 2007/.test(text), 'should parse h1');

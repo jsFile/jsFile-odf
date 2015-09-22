@@ -1,12 +1,46 @@
 import JsFile from 'JsFile';
-import parseListStyles from './parseListStyles';
-import parseTableStyles from './parseTableStyles';
-import parseTableColumnStyles from './parseTableColumnStyles';
-import parseTableCellStyles from './parseTableCellStyles';
-import parseParagraphStyles from './parseParagraphStyles';
-import parseTextStyles from './parseTextStyles';
+import parseListProperties from './parseListProperties';
+import parseTableProperties from './parseTableProperties';
+import parseTableColumnProperties from './parseTableColumnProperties';
+import parseTableCellProperties from './parseTableCellProperties';
+import parseTableRowProperties from './parseTableRowProperties';
+import parseParagraphProperties from './parseParagraphProperties';
+import parseTextProperties from './parseTextProperties';
 const {merge} = JsFile.Engine;
 const defaultStyleNodeName = 'default-style';
+const parsers = {
+    'table-properties': {
+        name: 'table',
+        selector: 'table',
+        exec: parseTableProperties
+    },
+    'table-column-properties': {
+        name: 'tableColumn',
+        selector: 'td',
+        exec: parseTableColumnProperties
+    },
+    'table-cell-properties': {
+        name: 'tableCell',
+        selector: 'td',
+        exec: parseTableCellProperties
+    },
+    'table-row-properties': {
+        name: 'tableRow',
+        selector: 'tr',
+        exec: parseTableRowProperties
+    },
+    'paragraph-properties': {
+        name: 'paragraph',
+        selector: 'p',
+        exec: parseParagraphProperties
+    },
+    'text-properties': {
+        name: 'text',
+        selector: 'p',
+        exec: parseTextProperties
+    }
+};
+const forEach = [].forEach;
 
 function readNodes (i, length, nodes, result, resolve, reject) {
     let size = i + 100;
@@ -16,42 +50,42 @@ function readNodes (i, length, nodes, result, resolve, reject) {
     }
 
     for (; i < size; i++) {
-        let attrValue;
+        let styleName;
+        let isNew = true;
         const node = nodes[i];
         const {localName, attributes} = node;
 
         if (localName === 'style' || localName === defaultStyleNodeName) {
-            let namedStyle;
-            attrValue = attributes['style:name'] && attributes['style:name'].value;
+            let dest;
+            styleName = (attributes['style:next-style-name'] && attributes['style:next-style-name'].value);
+            styleName = styleName || (attributes['style:name'] && attributes['style:name'].value);
 
-            if (localName !== defaultStyleNodeName && attrValue) {
-                namedStyle = result.named[attrValue] = result.named[attrValue] || {};
+            if (localName === defaultStyleNodeName || !styleName) {
+                dest = result.defaults;
+            } else {
+                isNew = !result.named[styleName];
+                dest = result.named[styleName] = result.named[styleName] || {};
             }
 
-            attrValue = attributes['style:family'] && attributes['style:family'].value;
-            switch (attrValue) {
-                case 'table':
-                    (namedStyle || result).table = parseTableStyles(node);
-                    break;
-                case 'table-column':
-                    (namedStyle || result).tableColumn = parseTableColumnStyles(node);
-                    break;
-                case 'table-cell':
-                    (namedStyle || result).tableCell = parseTableCellStyles(node);
-                    break;
-                case 'paragraph':
-                    (namedStyle || result).paragraph = parseParagraphStyles(node);
-                    break;
-                case 'text':
-                    (namedStyle || result).text = parseTextStyles(node);
-                    break;
-            }
-        } else {
-            attrValue = attributes['style:name'] && attributes['style:name'].value;
-            if (localName === 'list-style' && attrValue) {
-                result.named[attrValue] = merge(result.named[attrValue] || {}, parseListStyles(node));
-            }
+            forEach.call(node.childNodes || [], (node) => {
+                const {exec, selector, name} = parsers[node.localName] || {};
+                if (exec && name) {
+                    const data = exec(node);
+                    dest[name] = isNew ? data : merge(dest[name], data);
+                    result.computed.push({
+                        selector: styleName ? `.${styleName}` : selector,
+                        properties: dest[name].style
+                    });
+                }
+            });
         }
+
+        //else if (localName === 'list-style') {
+        //    styleName = attributes['style:name'] && attributes['style:name'].value;
+        //    if (styleName) {
+        //        result.named[styleName] = merge(result.named[styleName] || {}, parseListProperties(node));
+        //    }
+        //}
     }
 
     if (i === length) {
@@ -62,12 +96,14 @@ function readNodes (i, length, nodes, result, resolve, reject) {
     setTimeout(() => readNodes(i, length, nodes, result, resolve, reject));
 }
 
-export default function (node) {
+export default function (node, result) {
     return new Promise((resolve, reject) => {
         const nodes = node && node.childNodes || [];
-
-        readNodes(0, nodes.length, nodes, {
-            named: {}
-        }, resolve, reject);
+        const result = {
+            defaults: {},
+            named: {},
+            computed: []
+        };
+        readNodes(0, nodes.length, nodes, result, resolve, reject);
     });
 }

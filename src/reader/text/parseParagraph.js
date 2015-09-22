@@ -1,11 +1,11 @@
 import JsFile from 'JsFile';
 import getSize from './getSize';
 const {Document} = JsFile;
-const {tabAsSpaces, merge} = JsFile.Engine;
+const {tabAsSpaces} = JsFile.Engine;
 
 export default function (params) {
     let result = Document.elementPrototype;
-    const {node, styles, documentData} = params;
+    const {node, documentData} = params;
     result.properties.tagName = 'P';
 
     if (!node) {

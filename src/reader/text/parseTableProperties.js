@@ -10,7 +10,7 @@ export default function (node) {
     let result = {
         style: {}
     };
-    node = node && node.querySelector('table-properties');
+
     if (node) {
         let attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
         if (attrValue) {

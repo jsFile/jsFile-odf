@@ -1,8 +1,12 @@
 {
     "name": "jsfile-odf",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "jsFile-odf",
     "main": "dist/jsfile-odf.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jsFile/jsFile-odf.git"
+    },
     "scripts": {
         "test": "./node_modules/.bin/grunt blobify && ./node_modules/.bin/karma start",
         "build": "./node_modules/.bin/grunt build",

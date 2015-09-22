@@ -262,7 +262,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseStyles2 = _interopRequireDefault(_parseStyles);
 
-	var _parseDocumentContent = __webpack_require__(16);
+	var _parseDocumentContent = __webpack_require__(17);
 
 	var _parseDocumentContent2 = _interopRequireDefault(_parseDocumentContent);
 
@@ -443,10 +443,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseStylesNode2 = _interopRequireDefault(_parseStylesNode);
 
-	var tags = {
-	    paragraph: 'p'
-	};
-
 	/**
 	 *
 	 * @param xml
@@ -456,72 +452,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = function (xml) {
 	    return new Promise(function (resolve, reject) {
-	        var result = {
-	            automatic: {
-	                layouts: {}
-	            },
-	            pageLayout: '',
-	            defaults: {}
-	        };
+	        var pageLayoutName = undefined;
+	        var layouts = {};
 	        var firstPageLayout = '';
-	        var node = xml.querySelector('master-styles');
-	        [].forEach.call(node && node.childNodes || [], function (_ref) {
-	            var localName = _ref.localName;
-	            var attributes = _ref.attributes;
-
-	            if (localName === 'master-page') {
-	                var attrValue = attributes['style:page-layout-name'] && attributes['style:page-layout-name'].value;
-	                if (attrValue) {
-	                    result.pageLayout = attrValue;
-	                }
+	        var node = xml.querySelector('master-styles master-page');
+	        if (node) {
+	            var attrValue = node.attributes['style:page-layout-name'] && node.attributes['style:page-layout-name'].value;
+	            if (attrValue) {
+	                pageLayoutName = attrValue;
 	            }
-	        });
-
-	        node = xml.querySelector('automatic-styles');
-	        [].forEach.call(node && node.childNodes || [], function (_ref2) {
-	            var localName = _ref2.localName;
-	            var attributes = _ref2.attributes;
-
-	            if (localName === 'page-layout') {
-	                var attrValue = attributes['style:name'] && attributes['style:name'].value;
-	                if (attrValue) {
-	                    result.automatic.layouts[attrValue] = (0, _parsePageLayoutStyles2['default'])(node);
-
-	                    if (!firstPageLayout) {
-	                        firstPageLayout = attrValue;
-	                    }
-	                }
-	            }
-	        });
-
-	        if (!result.automatic.layouts[result.pageLayout] && firstPageLayout) {
-	            result.pageLayout = firstPageLayout;
 	        }
 
-	        (0, _parseStylesNode2['default'])(xml.querySelector('styles')).then(function (styles) {
-	            result.defaults = styles;
-	            result.computed = [];
-	            for (var k in styles) {
-	                if (styles.hasOwnProperty(k)) {
-	                    var item = styles[k];
-	                    if (k === 'named') {
-	                        for (var i in item) {
-	                            if (item.hasOwnProperty(i)) {
-	                                result.computed.push({
-	                                    selector: '.' + i,
-	                                    rules: item[i].style
-	                                });
-	                            }
-	                        }
-	                    } else {
-	                        result.computed.push({
-	                            selector: tags[k] || k,
-	                            rules: item.style
-	                        });
-	                    }
+	        [].forEach.call(xml.querySelectorAll('automatic-styles page-layout'), function (node) {
+	            var attrValue = node.attributes['style:name'] && node.attributes['style:name'].value;
+	            if (attrValue) {
+	                layouts[attrValue] = (0, _parsePageLayoutStyles2['default'])(node);
+
+	                if (!firstPageLayout) {
+	                    firstPageLayout = attrValue;
 	                }
 	            }
+	        });
 
+	        var pageLayout = layouts[pageLayoutName] || layouts[firstPageLayout];
+	        (0, _parseStylesNode2['default'])(xml.querySelector('styles')).then(function (result) {
 	            resolve(result);
 	        }, reject);
 	    });
@@ -581,7 +535,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    node = node && node.querySelector('page-layout-properties');
-
 	    if (node) {
 	        Array.prototype.forEach.call(node.attributes || [], function (attr) {
 	            var size = undefined;
@@ -635,23 +588,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 
-	        [].forEach.call(node && node.childNodes || [], function (node) {
+	        [].forEach.call(node.childNodes || [], function (node) {
 	            if (node.localName === 'footnote-sep') {
 	                var attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
 	                var size = attrValue && (0, _getSize2['default'])(attrValue);
-	                if (size.unit) {
+	                if (size && size.unit) {
 	                    result.footnote.style.width = size;
 	                }
 
 	                attrValue = node.attributes['style:distance-before-sep'] && node.attributes['style:distance-before-sep'].value;
 	                size = attrValue && (0, _getSize2['default'])(attrValue);
-	                if (size.unit) {
+	                if (size && size.unit) {
 	                    result.footnote.style.marginTop = size;
 	                }
 
 	                attrValue = node.attributes['style:distance-after-sep'] && node.attributes['style:distance-after-sep'].value;
 	                size = attrValue && (0, _getSize2['default'])(attrValue);
-	                if (size.unit) {
+	                if (size && size.unit) {
 	                    result.footnote.style.marginBottom = size;
 	                }
 
@@ -741,33 +694,70 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseListStyles = __webpack_require__(9);
+	var _parseListProperties = __webpack_require__(9);
 
-	var _parseListStyles2 = _interopRequireDefault(_parseListStyles);
+	var _parseListProperties2 = _interopRequireDefault(_parseListProperties);
 
-	var _parseTableStyles = __webpack_require__(10);
+	var _parseTableProperties = __webpack_require__(10);
 
-	var _parseTableStyles2 = _interopRequireDefault(_parseTableStyles);
+	var _parseTableProperties2 = _interopRequireDefault(_parseTableProperties);
 
-	var _parseTableColumnStyles = __webpack_require__(11);
+	var _parseTableColumnProperties = __webpack_require__(11);
 
-	var _parseTableColumnStyles2 = _interopRequireDefault(_parseTableColumnStyles);
+	var _parseTableColumnProperties2 = _interopRequireDefault(_parseTableColumnProperties);
 
-	var _parseTableCellStyles = __webpack_require__(12);
+	var _parseTableCellProperties = __webpack_require__(12);
 
-	var _parseTableCellStyles2 = _interopRequireDefault(_parseTableCellStyles);
+	var _parseTableCellProperties2 = _interopRequireDefault(_parseTableCellProperties);
 
-	var _parseParagraphStyles = __webpack_require__(14);
+	var _parseTableRowProperties = __webpack_require__(14);
 
-	var _parseParagraphStyles2 = _interopRequireDefault(_parseParagraphStyles);
+	var _parseTableRowProperties2 = _interopRequireDefault(_parseTableRowProperties);
 
-	var _parseTextStyles = __webpack_require__(15);
+	var _parseParagraphProperties = __webpack_require__(15);
 
-	var _parseTextStyles2 = _interopRequireDefault(_parseTextStyles);
+	var _parseParagraphProperties2 = _interopRequireDefault(_parseParagraphProperties);
+
+	var _parseTextProperties = __webpack_require__(16);
+
+	var _parseTextProperties2 = _interopRequireDefault(_parseTextProperties);
 
 	var merge = _JsFile2['default'].Engine.merge;
 
 	var defaultStyleNodeName = 'default-style';
+	var parsers = {
+	    'table-properties': {
+	        name: 'table',
+	        selector: 'table',
+	        exec: _parseTableProperties2['default']
+	    },
+	    'table-column-properties': {
+	        name: 'tableColumn',
+	        selector: 'td',
+	        exec: _parseTableColumnProperties2['default']
+	    },
+	    'table-cell-properties': {
+	        name: 'tableCell',
+	        selector: 'td',
+	        exec: _parseTableCellProperties2['default']
+	    },
+	    'table-row-properties': {
+	        name: 'tableRow',
+	        selector: 'tr',
+	        exec: _parseTableRowProperties2['default']
+	    },
+	    'paragraph-properties': {
+	        name: 'paragraph',
+	        selector: 'p',
+	        exec: _parseParagraphProperties2['default']
+	    },
+	    'text-properties': {
+	        name: 'text',
+	        selector: 'p',
+	        exec: _parseTextProperties2['default']
+	    }
+	};
+	var forEach = [].forEach;
 
 	function readNodes(i, length, nodes, result, resolve, reject) {
 	    var size = i + 100;
@@ -776,44 +766,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	        size = length;
 	    }
 
-	    for (; i < size; i++) {
-	        var attrValue = undefined;
+	    var _loop = function () {
+	        var styleName = undefined;
+	        var isNew = true;
 	        var node = nodes[i];
 	        var localName = node.localName;
 	        var attributes = node.attributes;
 
 	        if (localName === 'style' || localName === defaultStyleNodeName) {
-	            var namedStyle = undefined;
-	            attrValue = attributes['style:name'] && attributes['style:name'].value;
+	            (function () {
+	                var dest = undefined;
+	                styleName = attributes['style:next-style-name'] && attributes['style:next-style-name'].value;
+	                styleName = styleName || attributes['style:name'] && attributes['style:name'].value;
 
-	            if (localName !== defaultStyleNodeName && attrValue) {
-	                namedStyle = result.named[attrValue] = result.named[attrValue] || {};
-	            }
+	                if (localName === defaultStyleNodeName || !styleName) {
+	                    dest = result.defaults;
+	                } else {
+	                    isNew = !result.named[styleName];
+	                    dest = result.named[styleName] = result.named[styleName] || {};
+	                }
 
-	            attrValue = attributes['style:family'] && attributes['style:family'].value;
-	            switch (attrValue) {
-	                case 'table':
-	                    (namedStyle || result).table = (0, _parseTableStyles2['default'])(node);
-	                    break;
-	                case 'table-column':
-	                    (namedStyle || result).tableColumn = (0, _parseTableColumnStyles2['default'])(node);
-	                    break;
-	                case 'table-cell':
-	                    (namedStyle || result).tableCell = (0, _parseTableCellStyles2['default'])(node);
-	                    break;
-	                case 'paragraph':
-	                    (namedStyle || result).paragraph = (0, _parseParagraphStyles2['default'])(node);
-	                    break;
-	                case 'text':
-	                    (namedStyle || result).text = (0, _parseTextStyles2['default'])(node);
-	                    break;
-	            }
-	        } else {
-	            attrValue = attributes['style:name'] && attributes['style:name'].value;
-	            if (localName === 'list-style' && attrValue) {
-	                result.named[attrValue] = merge(result.named[attrValue] || {}, (0, _parseListStyles2['default'])(node));
-	            }
+	                forEach.call(node.childNodes || [], function (node) {
+	                    var _ref = parsers[node.localName] || {};
+
+	                    var exec = _ref.exec;
+	                    var selector = _ref.selector;
+	                    var name = _ref.name;
+
+	                    if (exec && name) {
+	                        var data = exec(node);
+	                        dest[name] = isNew ? data : merge(dest[name], data);
+	                        result.computed.push({
+	                            selector: styleName ? '.' + styleName : selector,
+	                            properties: dest[name].style
+	                        });
+	                    }
+	                });
+	            })();
 	        }
+
+	        //else if (localName === 'list-style') {
+	        //    styleName = attributes['style:name'] && attributes['style:name'].value;
+	        //    if (styleName) {
+	        //        result.named[styleName] = merge(result.named[styleName] || {}, parseListProperties(node));
+	        //    }
+	        //}
+	    };
+
+	    for (; i < size; i++) {
+	        _loop();
 	    }
 
 	    if (i === length) {
@@ -826,13 +827,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	}
 
-	exports['default'] = function (node) {
+	exports['default'] = function (node, result) {
 	    return new Promise(function (resolve, reject) {
 	        var nodes = node && node.childNodes || [];
-
-	        readNodes(0, nodes.length, nodes, {
-	            named: {}
-	        }, resolve, reject);
+	        var result = {
+	            defaults: {},
+	            named: {},
+	            computed: []
+	        };
+	        readNodes(0, nodes.length, nodes, result, resolve, reject);
 	    });
 	};
 
@@ -903,7 +906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var result = {
 	        style: {}
 	    };
-	    node = node && node.querySelector('table-properties');
+
 	    if (node) {
 	        var attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
 	        if (attrValue) {
@@ -952,8 +955,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var result = {
 	        style: {}
 	    };
-
-	    node = node && node.querySelector('table-column-properties');
 
 	    if (node) {
 	        var attr = node.attributes['style:column-width'];
@@ -1007,8 +1008,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var result = {
 	        style: {}
 	    };
-
-	    node = node && node.querySelector('table-cell-properties');
 
 	    Array.prototype.forEach.call(node && node.attributes || [], function (attr) {
 	        var _attr$value = attr.value;
@@ -1112,27 +1111,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _JsFile = __webpack_require__(1);
-
-	var _JsFile2 = _interopRequireDefault(_JsFile);
-
-	var _getSize = __webpack_require__(7);
-
-	var _getSize2 = _interopRequireDefault(_getSize);
-
-	var _JsFile$Engine = _JsFile2['default'].Engine;
-	var formatPropertyName = _JsFile$Engine.formatPropertyName;
-	var normalizeColorValue = _JsFile$Engine.normalizeColorValue;
+/***/ function(module, exports) {
 
 	/**
 	 *
@@ -1140,44 +1119,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {Object}
 	 * @private
 	 */
+	"use strict";
 
-	exports['default'] = function (node) {
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports["default"] = function (node) {
 	    var result = {
 	        style: {}
 	    };
-	    node = node && node.querySelector('paragraph-properties');
-
-	    Array.prototype.forEach.call(node && node.attributes || [], function (attr) {
-	        var _attr$value = attr.value;
-	        var value = _attr$value === undefined ? '' : _attr$value;
-	        var _attr$name = attr.name;
-	        var name = _attr$name === undefined ? '' : _attr$name;
-
-	        var prop = name && formatPropertyName(name);
-
-	        if (prop.includes('padding') || prop.includes('margin')) {
-	            var size = value && (0, _getSize2['default'])(value);
-
-	            if (size && size.unit) {
-	                result.style[prop] = size;
-	            }
-	        } else if (prop === 'backgroundColor') {
-	            result.style[prop] = normalizeColorValue(value);
-	        } else if (prop === 'writingMode') {
-	            result.style.direction = /rl/i.test(value) ? 'rtl' : 'ltr';
-	        } else if (prop === 'textAlign') {
-	            var align = /center|left|right/i.exec(value);
-
-	            if (align && align[0]) {
-	                result.style[prop] = align[0];
-	            }
-	        }
-	    });
 
 	    return result;
 	};
 
-	module.exports = exports['default'];
+	;
+	module.exports = exports["default"];
 
 /***/ },
 /* 15 */
@@ -1212,10 +1169,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports['default'] = function (node) {
 	    var result = {
-	        style: {},
-	        properties: {}
+	        style: {}
 	    };
-	    node = node && node.querySelector('text-properties');
+
 	    Array.prototype.forEach.call(node && node.attributes || [], function (attr) {
 	        var _attr$value = attr.value;
 	        var value = _attr$value === undefined ? '' : _attr$value;
@@ -1224,7 +1180,76 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var prop = name && formatPropertyName(name);
 
-	        if (prop.includes('padding') || prop.includes('margin') || prop.includes('fontSize')) {
+	        if (prop.includes('padding') || prop.includes('margin')) {
+	            var size = value && (0, _getSize2['default'])(value);
+
+	            if (size && size.unit) {
+	                result.style[prop] = size;
+	            }
+	        } else if (prop === 'backgroundColor') {
+	            result.style[prop] = normalizeColorValue(value);
+	        } else if (prop === 'writingMode') {
+	            result.style.direction = /rl/i.test(value) ? 'rtl' : 'ltr';
+	        } else if (prop === 'textAlign') {
+	            var align = /center|left|right/i.exec(value);
+
+	            if (align && align[0]) {
+	                result.style[prop] = align[0];
+	            }
+	        }
+	    });
+
+	    return result;
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _JsFile = __webpack_require__(1);
+
+	var _JsFile2 = _interopRequireDefault(_JsFile);
+
+	var _getSize = __webpack_require__(7);
+
+	var _getSize2 = _interopRequireDefault(_getSize);
+
+	var _JsFile$Engine = _JsFile2['default'].Engine;
+	var formatPropertyName = _JsFile$Engine.formatPropertyName;
+	var normalizeColorValue = _JsFile$Engine.normalizeColorValue;
+
+	/**
+	 *
+	 * @param node
+	 * @return {Object}
+	 * @private
+	 */
+
+	exports['default'] = function (node) {
+	    var result = {
+	        style: {},
+	        properties: {}
+	    };
+
+	    Array.prototype.forEach.call(node && node.attributes || [], function (attr) {
+	        var _attr$value = attr.value;
+	        var value = _attr$value === undefined ? '' : _attr$value;
+	        var _attr$name = attr.name;
+	        var name = _attr$name === undefined ? '' : _attr$name;
+
+	        var prop = name && formatPropertyName(name);
+
+	        if (prop.includes('padding') || prop.includes('margin') || prop === 'fontSize') {
 	            var size = value && (0, _getSize2['default'])(value);
 
 	            if (size && size.unit) {
@@ -1251,7 +1276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1266,26 +1291,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseStylesNode = __webpack_require__(8);
-
-	var _parseStylesNode2 = _interopRequireDefault(_parseStylesNode);
-
-	var _parseParagraph = __webpack_require__(17);
+	var _parseParagraph = __webpack_require__(18);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
-	var _parseList = __webpack_require__(18);
+	var _parseList = __webpack_require__(19);
 
 	var _parseList2 = _interopRequireDefault(_parseList);
 
-	var _parseTable = __webpack_require__(19);
+	var _parseTable = __webpack_require__(20);
 
 	var _parseTable2 = _interopRequireDefault(_parseTable);
 
 	var Document = _JsFile2['default'].Document;
-	var _JsFile$Engine = _JsFile2['default'].Engine;
-	var errors = _JsFile$Engine.errors;
-	var merge = _JsFile$Engine.merge;
+	var invalidReadFile = _JsFile2['default'].Engine.errors.invalidReadFile;
 
 	var parsers = {
 	    p: _parseParagraph2['default'],
@@ -1296,12 +1315,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function (params) {
 	    return new Promise(function (resolve, reject) {
 	        var xml = params.xml;
-	        var _params$documentData = params.documentData;
-	        var documentData = _params$documentData === undefined ? {} : _params$documentData;
+	        var documentData = params.documentData;
 	        var fileName = params.fileName;
 
-	        if (!xml) {
-	            reject(new Error(errors.invalidReadFile.message));
+	        if (!xml || !documentData) {
+	            reject(new Error(invalidReadFile));
 	        }
 
 	        var result = {
@@ -1310,24 +1328,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            content: [],
 	            styles: documentData.styles.computed
 	        };
-	        var pageLayout = documentData.styles && documentData.styles.automatic && documentData.styles.automatic.layouts && documentData.styles.automatic.layouts[documentData.styles.pageLayout];
 	        var node = xml.querySelector('body text');
 	        if (node) {
-	            (0, _parseStylesNode2['default'])(xml.querySelector('automatic-styles')).then(function (styles) {
-	                var page = merge(pageLayout && pageLayout.page || {}, Document.elementPrototype);
+	            (function () {
+	                var page = Document.elementPrototype;
 	                [].forEach.call(node && node.childNodes || [], function (node) {
 	                    var parser = parsers[node.localName];
-
 	                    if (parser) {
 	                        var el = parser({
 	                            node: node,
-	                            styles: styles,
 	                            documentData: documentData
 	                        });
 
 	                        if (el.properties.pageBreak) {
 	                            result.content.push(page);
-	                            page = merge(pageLayout && pageLayout.page || {}, Document.elementPrototype);
+	                            page = Document.elementPrototype;
 	                        }
 
 	                        page.children.push(el);
@@ -1335,18 +1350,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                });
 
 	                result.content.push(page);
-	                resolve(result);
-	            }, reject);
-	        } else {
-	            resolve(result);
+	            })();
 	        }
+
+	        resolve(result);
 	    });
 	};
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1366,14 +1380,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _getSize2 = _interopRequireDefault(_getSize);
 
 	var Document = _JsFile2['default'].Document;
-	var _JsFile$Engine = _JsFile2['default'].Engine;
-	var tabAsSpaces = _JsFile$Engine.tabAsSpaces;
-	var merge = _JsFile$Engine.merge;
+	var tabAsSpaces = _JsFile2['default'].Engine.tabAsSpaces;
 
 	exports['default'] = function (params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
-	    var styles = params.styles;
 	    var documentData = params.documentData;
 
 	    result.properties.tagName = 'P';
@@ -1479,7 +1490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1494,17 +1505,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseParagraph = __webpack_require__(17);
+	var _parseParagraph = __webpack_require__(18);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
 	var Document = _JsFile2['default'].Document;
-	var merge = _JsFile2['default'].Engine.merge;
 
 	exports['default'] = function (params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
-	    var styles = params.styles;
 	    var documentData = params.documentData;
 
 	    result.properties.tagName = 'UL';
@@ -1529,7 +1538,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        push.apply(el.children, map.call(node.querySelectorAll('p'), function (node) {
 	            return (0, _parseParagraph2['default'])({
 	                node: node,
-	                styles: styles,
 	                documentData: documentData
 	            });
 	        }));
@@ -1543,7 +1551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1558,16 +1566,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseParagraph = __webpack_require__(17);
+	var _parseParagraph = __webpack_require__(18);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
 	var Document = _JsFile2['default'].Document;
-	var merge = _JsFile2['default'].Engine.merge;
 
 	exports['default'] = function (params) {
 	    var node = params.node;
-	    var styles = params.styles;
 	    var documentData = params.documentData;
 
 	    var thead = Document.elementPrototype;
@@ -1589,8 +1595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (localName === 'table-row') {
 	            tbody.children.push(parseTableRow({
 	                node: node,
-	                documentData: documentData,
-	                styles: styles
+	                documentData: documentData
 	            }));
 	        } else if (localName === 'table-header-rows') {
 	            var arrProto = Array.prototype;
@@ -1598,8 +1603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return parseTableRow({
 	                    head: true,
 	                    node: node,
-	                    documentData: documentData,
-	                    styles: styles
+	                    documentData: documentData
 	                });
 	            }));
 	        }
@@ -1615,7 +1619,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var map = arrProto.map;
 	    var result = Document.elementPrototype;
 	    var node = params.node;
-	    var styles = params.styles;
 	    var documentData = params.documentData;
 	    var head = params.head;
 
@@ -1627,7 +1630,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        push.apply(el.children, map.call(node.querySelectorAll('p'), function (node) {
 	            return (0, _parseParagraph2['default'])({
 	                node: node,
-	                styles: styles,
 	                documentData: documentData
 	            });
 	        }));

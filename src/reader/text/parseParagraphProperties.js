@@ -12,7 +12,6 @@ export default function (node) {
     let result = {
         style: {}
     };
-    node = node && node.querySelector('paragraph-properties');
 
     Array.prototype.forEach.call(node && node.attributes || [], attr => {
         const {value = '', name = ''} = attr;

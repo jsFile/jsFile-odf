@@ -1,11 +1,10 @@
 import JsFile from 'JsFile';
 import parseParagraph from './parseParagraph';
 const {Document} = JsFile;
-const {merge} = JsFile.Engine;
 
 export default function (params) {
     let result = Document.elementPrototype;
-    let {node, styles, documentData} = params;
+    let {node, documentData} = params;
 
     result.properties.tagName = 'UL';
 
@@ -29,7 +28,6 @@ export default function (params) {
         push.apply(el.children, map.call(node.querySelectorAll('p'), node => {
             return parseParagraph({
                 node,
-                styles,
                 documentData
             });
         }));

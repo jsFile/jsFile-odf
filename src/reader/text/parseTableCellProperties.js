@@ -14,8 +14,6 @@ export default function (node) {
         style: {}
     };
 
-    node = node && node.querySelector('table-cell-properties');
-
     Array.prototype.forEach.call(node && node.attributes || [], attr => {
         const {value = '', name = ''} = attr;
         const prop = name && formatPropertyName(name);

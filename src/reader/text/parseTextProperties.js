@@ -13,12 +13,12 @@ export default function (node) {
         style: {},
         properties: {}
     };
-    node = node && node.querySelector('text-properties');
+
     Array.prototype.forEach.call(node && node.attributes || [], attr => {
         const {value = '', name = ''} = attr;
         const prop = name && formatPropertyName(name);
 
-        if (prop.includes('padding') || prop.includes('margin') || prop.includes('fontSize')) {
+        if (prop.includes('padding') || prop.includes('margin') || prop === 'fontSize') {
             const size = value && getSize(value);
 
             if (size && size.unit) {

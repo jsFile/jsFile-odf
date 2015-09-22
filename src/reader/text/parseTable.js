@@ -1,10 +1,9 @@
 import JsFile from 'JsFile';
 import parseParagraph from './parseParagraph';
 const {Document} = JsFile;
-const {merge} = JsFile.Engine;
 
 export default function (params) {
-    const {node, styles, documentData} = params;
+    const {node, documentData} = params;
     const thead = Document.elementPrototype;
     const tbody = Document.elementPrototype;
     const result = Document.elementPrototype;
@@ -24,8 +23,7 @@ export default function (params) {
         if (localName === 'table-row') {
             tbody.children.push(parseTableRow({
                 node,
-                documentData,
-                styles
+                documentData
             }));
         } else if (localName === 'table-header-rows') {
             let arrProto = Array.prototype;
@@ -33,8 +31,7 @@ export default function (params) {
                 return parseTableRow({
                     head: true,
                     node,
-                    documentData,
-                    styles
+                    documentData
                 });
             }));
         }
@@ -49,7 +46,7 @@ function parseTableRow (params) {
     const push = arrProto.push;
     const map = arrProto.map;
     let result = Document.elementPrototype;
-    const {node, styles, documentData, head} = params;
+    const {node, documentData, head} = params;
     result.properties.tagName = 'TR';
     push.apply(result.children, map.call(node.querySelectorAll('table-cell'), (node) => {
         let el = Document.elementPrototype;
@@ -58,7 +55,6 @@ function parseTableRow (params) {
         push.apply(el.children, map.call(node.querySelectorAll('p'), (node) => {
             return parseParagraph({
                 node,
-                styles,
                 documentData
             });
         }));

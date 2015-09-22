@@ -9,27 +9,26 @@ const {formatPropertyName, normalizeColorValue} = JsFile.Engine;
  * @private
  */
 export default function (node) {
-    let result = {
-            page: {
-                style: {},
-                properties: {}
-            },
-            footnote: {
-                style: {},
-                properties: {}
-            },
-            footer: {
-                style: {},
-                properties: {}
-            },
-            header: {
-                style: {},
-                properties: {}
-            }
-        };
+    const result = {
+        page: {
+            style: {},
+            properties: {}
+        },
+        footnote: {
+            style: {},
+            properties: {}
+        },
+        footer: {
+            style: {},
+            properties: {}
+        },
+        header: {
+            style: {},
+            properties: {}
+        }
+    };
 
     node = node && node.querySelector('page-layout-properties');
-
     if (node) {
         Array.prototype.forEach.call(node.attributes || [], attr => {
             let size;
@@ -79,25 +78,25 @@ export default function (node) {
             }
         });
 
-        [].forEach.call(node && node.childNodes || [], (node) => {
+        [].forEach.call(node.childNodes || [], (node) => {
             if (node.localName === 'footnote-sep') {
                 let attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
                 let size = attrValue && getSize(attrValue);
-                if (size.unit) {
+                if (size && size.unit) {
                     result.footnote.style.width = size;
                 }
 
                 attrValue = node.attributes['style:distance-before-sep'] &&
                     node.attributes['style:distance-before-sep'].value;
                 size = attrValue && getSize(attrValue);
-                if (size.unit) {
+                if (size && size.unit) {
                     result.footnote.style.marginTop = size;
                 }
 
                 attrValue = node.attributes['style:distance-after-sep'] &&
                     node.attributes['style:distance-after-sep'].value;
                 size = attrValue && getSize(attrValue);
-                if (size.unit) {
+                if (size && size.unit) {
                     result.footnote.style.marginBottom = size;
                 }
 

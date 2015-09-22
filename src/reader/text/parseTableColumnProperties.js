@@ -11,8 +11,6 @@ export default function (node) {
         style: {}
     };
 
-    node = node && node.querySelector('table-column-properties');
-
     if (node) {
         const attr = node.attributes['style:column-width'];
         const size = attr && getSize(attr.value);
