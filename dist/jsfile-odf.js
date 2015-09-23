@@ -1291,26 +1291,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseParagraph = __webpack_require__(18);
+	var _parseDocumentElement = __webpack_require__(18);
 
-	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
-
-	var _parseList = __webpack_require__(19);
-
-	var _parseList2 = _interopRequireDefault(_parseList);
-
-	var _parseTable = __webpack_require__(20);
-
-	var _parseTable2 = _interopRequireDefault(_parseTable);
+	var _parseDocumentElement2 = _interopRequireDefault(_parseDocumentElement);
 
 	var Document = _JsFile2['default'].Document;
 	var invalidReadFile = _JsFile2['default'].Engine.errors.invalidReadFile;
-
-	var parsers = {
-	    p: _parseParagraph2['default'],
-	    list: _parseList2['default'],
-	    table: _parseTable2['default']
-	};
 
 	exports['default'] = function (params) {
 	    return new Promise(function (resolve, reject) {
@@ -1333,13 +1319,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            (function () {
 	                var page = Document.elementPrototype;
 	                [].forEach.call(node && node.childNodes || [], function (node) {
-	                    var parser = parsers[node.localName];
-	                    if (parser) {
-	                        var el = parser({
-	                            node: node,
-	                            documentData: documentData
-	                        });
+	                    var el = (0, _parseDocumentElement2['default'])({
+	                        node: node,
+	                        documentData: documentData
+	                    });
 
+	                    if (el) {
 	                        if (el.properties.pageBreak) {
 	                            result.content.push(page);
 	                            page = Document.elementPrototype;
@@ -1361,6 +1346,59 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _parseParagraph = __webpack_require__(19);
+
+	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
+
+	var _parseList = __webpack_require__(20);
+
+	var _parseList2 = _interopRequireDefault(_parseList);
+
+	var _parseTable = __webpack_require__(21);
+
+	var _parseTable2 = _interopRequireDefault(_parseTable);
+
+	var _parseTableOfContent = __webpack_require__(22);
+
+	var _parseTableOfContent2 = _interopRequireDefault(_parseTableOfContent);
+
+	var _parseHeading = __webpack_require__(23);
+
+	var _parseHeading2 = _interopRequireDefault(_parseHeading);
+
+	var parsers = {
+	    p: _parseParagraph2['default'],
+	    h: _parseHeading2['default'],
+	    list: _parseList2['default'],
+	    table: _parseTable2['default'],
+	    'table-of-content': _parseTableOfContent2['default']
+	};
+
+	function parseDocumentElement(params) {
+	    var parser = params.node && parsers[params.node.localName];
+	    if (!parser) {
+	        return null;
+	    }
+
+	    params.parseDocumentElement = parseDocumentElement;
+	    return parser(params);
+	}
+
+	exports['default'] = parseDocumentElement;
+	module.exports = exports['default'];
+
+/***/ },
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1490,67 +1528,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _JsFile = __webpack_require__(1);
-
-	var _JsFile2 = _interopRequireDefault(_JsFile);
-
-	var _parseParagraph = __webpack_require__(18);
-
-	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
-
-	var Document = _JsFile2['default'].Document;
-
-	exports['default'] = function (params) {
-	    var result = Document.elementPrototype;
-	    var node = params.node;
-	    var documentData = params.documentData;
-
-	    result.properties.tagName = 'UL';
-
-	    if (!node) {
-	        return result;
-	    }
-
-	    var arrProto = Array.prototype;
-	    var push = arrProto.push;
-	    var map = arrProto.map;
-	    var attrValue = node.attributes['xml:id'] && node.attributes['xml:id'].value;
-	    if (attrValue) {
-	        result.properties.id = attrValue;
-	    }
-
-	    result.properties.className = node.attributes['text:style-name'] && node.attributes['text:style-name'].value || '';
-	    push.apply(result.children, map.call(node.querySelectorAll('list-item'), function (node) {
-	        var el = Document.elementPrototype;
-	        el.properties.tagName = 'LI';
-
-	        push.apply(el.children, map.call(node.querySelectorAll('p'), function (node) {
-	            return (0, _parseParagraph2['default'])({
-	                node: node,
-	                documentData: documentData
-	            });
-	        }));
-
-	        return el;
-	    }));
-
-	    return result;
-	};
-
-	module.exports = exports['default'];
-
-/***/ },
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1566,7 +1543,75 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseParagraph = __webpack_require__(18);
+	var _parseDocumentElement = __webpack_require__(18);
+
+	var _parseDocumentElement2 = _interopRequireDefault(_parseDocumentElement);
+
+	var Document = _JsFile2['default'].Document;
+
+	exports['default'] = function (params) {
+	    var result = Document.elementPrototype;
+	    var node = params.node;
+	    var documentData = params.documentData;
+
+	    result.properties.tagName = 'UL';
+
+	    if (!node) {
+	        return result;
+	    }
+
+	    var attributes = node.attributes;
+
+	    var arrProto = Array.prototype;
+	    var push = arrProto.push;
+	    var map = arrProto.map;
+	    var forEach = arrProto.forEach;
+	    var attrValue = attributes['xml:id'] && attributes['xml:id'].value;
+	    if (attrValue) {
+	        result.properties.id = attrValue;
+	    }
+
+	    result.properties.className = attributes['text:style-name'] && attributes['text:style-name'].value || '';
+	    push.apply(result.children, map.call(node.querySelectorAll('list-item'), function (node) {
+	        var el = Document.elementPrototype;
+	        el.properties.tagName = 'LI';
+
+	        forEach.call(node.childNodes || [], function (node) {
+	            var child = (0, _parseDocumentElement2['default'])({
+	                node: node,
+	                documentData: documentData
+	            });
+
+	            if (child) {
+	                el.children.push(child);
+	            }
+	        });
+
+	        return el;
+	    }));
+
+	    return result;
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _JsFile = __webpack_require__(1);
+
+	var _JsFile2 = _interopRequireDefault(_JsFile);
+
+	var _parseParagraph = __webpack_require__(19);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
@@ -1637,6 +1682,111 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return result;
 	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _JsFile = __webpack_require__(1);
+
+	var _JsFile2 = _interopRequireDefault(_JsFile);
+
+	var Document = _JsFile2['default'].Document;
+
+	exports['default'] = function (params) {
+	    var result = Document.elementPrototype;
+	    var node = params.node;
+	    var documentData = params.documentData;
+	    var parseDocumentElement = params.parseDocumentElement;
+
+	    result.properties.tagName = 'UL';
+
+	    if (!node) {
+	        return result;
+	    }
+
+	    var forEach = [].forEach;
+
+	    forEach.call(node.childNodes || [], function (node) {
+	        var localName = node.localName;
+
+	        if (localName === 'index-body') {
+	            forEach.call(node.childNodes || [], function (node) {
+	                var el = parseDocumentElement({
+	                    node: node,
+	                    documentData: documentData
+	                });
+
+	                if (el) {
+	                    el.properties.tagName = 'LI';
+	                    result.children.push(el);
+	                }
+	            });
+	        }
+	    });
+
+	    return result;
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _JsFile = __webpack_require__(1);
+
+	var _JsFile2 = _interopRequireDefault(_JsFile);
+
+	var Document = _JsFile2['default'].Document;
+
+	exports['default'] = function (params) {
+	    var result = Document.elementPrototype;
+	    var node = params.node;
+
+	    result.properties.tagName = 'SPAN';
+
+	    if (!node) {
+	        return result;
+	    }
+
+	    var _node$attributes = node.attributes;
+	    var attributes = _node$attributes === undefined ? {} : _node$attributes;
+	    var _node$textContent = node.textContent;
+	    var textContent = _node$textContent === undefined ? '' : _node$textContent;
+
+	    var attrValue = attributes['text:style-name'] && attributes['text:style-name'].value;
+	    if (attrValue) {
+	        result.properties.className = attrValue;
+	    }
+
+	    attrValue = attributes['text:outline-level'] && attributes['text:outline-level'].value;
+	    if (attrValue) {
+	        result.properties.outlineLevel = attrValue;
+	    }
+
+	    result.properties.textContent = textContent;
+
+	    return result;
+	};
+
 	module.exports = exports['default'];
 
 /***/ }

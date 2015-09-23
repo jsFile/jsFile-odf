@@ -1,36 +1,41 @@
 import JsFile from 'JsFile';
-import parseParagraph from './parseParagraph';
+import parseDocumentElement from './parseDocumentElement';
 const {Document} = JsFile;
 
 export default function (params) {
-    let result = Document.elementPrototype;
-    let {node, documentData} = params;
-
+    const result = Document.elementPrototype;
+    const {node, documentData} = params;
     result.properties.tagName = 'UL';
 
     if (!node) {
         return result;
     }
 
+    const {attributes} = node;
     const arrProto = Array.prototype;
-    let push = arrProto.push;
-    let map = arrProto.map;
-    const attrValue = node.attributes['xml:id'] && node.attributes['xml:id'].value;
+    const push = arrProto.push;
+    const map = arrProto.map;
+    const forEach = arrProto.forEach;
+    const attrValue = attributes['xml:id'] && attributes['xml:id'].value;
     if (attrValue) {
         result.properties.id = attrValue;
     }
 
-    result.properties.className = node.attributes['text:style-name'] && node.attributes['text:style-name'].value || '';
-    push.apply(result.children, map.call(node.querySelectorAll('list-item'), node => {
-        let el = Document.elementPrototype;
+    result.properties.className = attributes['text:style-name'] && attributes['text:style-name'].value || '';
+    push.apply(result.children, map.call(node.querySelectorAll('list-item'), (node) => {
+        const el = Document.elementPrototype;
         el.properties.tagName = 'LI';
 
-        push.apply(el.children, map.call(node.querySelectorAll('p'), node => {
-            return parseParagraph({
+        forEach.call(node.childNodes || [], (node) => {
+            const child = parseDocumentElement({
                 node,
                 documentData
             });
-        }));
+
+            if (child) {
+                el.children.push(child);
+            }
+        });
 
         return el;
     }));
