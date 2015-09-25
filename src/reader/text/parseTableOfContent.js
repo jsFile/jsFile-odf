@@ -5,6 +5,11 @@ export default function (params) {
     let result = Document.elementPrototype;
     const {node, documentData, parseDocumentElement} = params;
     result.properties.tagName = 'UL';
+    result.style.listStyle = 'none';
+    result.style.padding = {
+        value: 0,
+        unit: 'in'
+    };
 
     if (!node) {
         return result;

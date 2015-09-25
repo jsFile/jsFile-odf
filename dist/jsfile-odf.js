@@ -1434,10 +1434,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    result.properties.className = node.attributes['text:style-name'] && node.attributes['text:style-name'].value || '';
 	    [].forEach.call(node && node.childNodes || [], function (node) {
 	        var attrValue = undefined;
+	        var _node$textContent = node.textContent;
+	        var textContent = _node$textContent === undefined ? '' : _node$textContent;
+	        var localName = node.localName;
+	        var attributes = node.attributes;
+
 	        var el = Document.elementPrototype;
 	        el.properties.tagName = 'SPAN';
 
-	        switch (node.localName) {
+	        switch (localName) {
 	            case 'tab':
 	                el.properties.textContent = tabAsSpaces;
 	                result.children.push(el);
@@ -1445,12 +1450,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case 'soft-page-break':
 	                result.properties.pageBreak = true;
 	                break;
+	            case 'a':
 	            case 'span':
-	                attrValue = node.attributes['text:style-name'] && params.node.attributes['text:style-name'].value || '';
-	                el.properties.className = attrValue;
+	                if (localName === 'span') {
+	                    attrValue = attributes['text:style-name'] && attributes['text:style-name'].value || '';
+	                    el.properties.className = attrValue;
+	                } else {
+	                    el.properties.tagName = 'A';
+	                    attrValue = attributes['xlink:href'] && attributes['xlink:href'].value;
+	                    if (attrValue) {
+	                        el.properties.href = attrValue;
+	                        if (attrValue[0] !== '#') {
+	                            el.properties.target = '_blank';
+	                        }
+	                    }
+	                }
 
-	                [].forEach.call(node && node.childNodes || [], function (node) {
-	                    el.properties.textContent += node.textContent || '';
+	                [].forEach.call(node && node.childNodes || [], function (child) {
+	                    el.properties.textContent += child.textContent || '';
 	                });
 
 	                result.children.push(el);
@@ -1458,7 +1475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case 'frame':
 	                var size = undefined;
 
-	                attrValue = node.attributes['svg:x'] && node.attributes['svg:x'].value;
+	                attrValue = attributes['svg:x'] && attributes['svg:x'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1468,7 +1485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['svg:y'] && node.attributes['svg:y'].value;
+	                attrValue = attributes['svg:y'] && attributes['svg:y'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1478,7 +1495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['svg:width'] && node.attributes['svg:width'].value;
+	                attrValue = attributes['svg:width'] && attributes['svg:width'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1487,7 +1504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['svg:height'] && node.attributes['svg:height'].value;
+	                attrValue = attributes['svg:height'] && attributes['svg:height'].value;
 	                if (attrValue) {
 	                    size = (0, _getSize2['default'])(attrValue);
 
@@ -1496,12 +1513,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 
-	                attrValue = node.attributes['draw:z-index'] && node.attributes['draw:z-index'].value;
+	                attrValue = attributes['draw:z-index'] && attributes['draw:z-index'].value;
 	                if (!isNaN(attrValue)) {
 	                    el.style.zIndex = Number(attrValue);
 	                }
 
-	                attrValue = node.attributes['draw:style-name'] && node.attributes['draw:style-name'].value;
+	                attrValue = attributes['draw:style-name'] && attributes['draw:style-name'].value;
 	                if (attrValue) {
 	                    el.properties.styleName = attrValue;
 	                }
@@ -1517,7 +1534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                result.children.push(el);
 	                break;
 	            default:
-	                el.properties.textContent = node.textContent;
+	                el.properties.textContent = textContent;
 	                result.children.push(el);
 	        }
 	    });
@@ -1709,6 +1726,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var parseDocumentElement = params.parseDocumentElement;
 
 	    result.properties.tagName = 'UL';
+	    result.style.listStyle = 'none';
+	    result.style.padding = {
+	        value: 0,
+	        unit: 'in'
+	    };
 
 	    if (!node) {
 	        return result;
