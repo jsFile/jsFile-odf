@@ -32,6 +32,7 @@ export default (xml) => new Promise((resolve, reject) => {
 
     const pageLayout = layouts[pageLayoutName] || layouts[firstPageLayout];
     parseStylesNode(xml.querySelector('styles')).then((result) => {
+        result.pageLayout = pageLayout;
         resolve(result);
     }, reject);
 });

@@ -1,6 +1,6 @@
 {
     "name": "jsfile-odf",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "jsFile-odf",
     "main": "dist/jsfile-odf.js",
     "repository": {

@@ -476,6 +476,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var pageLayout = layouts[pageLayoutName] || layouts[firstPageLayout];
 	        (0, _parseStylesNode2['default'])(xml.querySelector('styles')).then(function (result) {
+	            result.pageLayout = pageLayout;
 	            resolve(result);
 	        }, reject);
 	    });
@@ -551,39 +552,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (size && size.unit) {
 	                    result.page.style[prop] = size;
 	                }
-	            } else if (name === 'writing-mode') {
-	                result.page.style.direction = /rl/ig.test(name) ? 'rtl' : 'ltr';
-	            } else if (name === 'print-orientation') {
-	                result.page.properties.isLandscapeOrientation = value === 'landscape';
-	            } else if (name === 'num-format') {
-	                if (value) {
-	                    result.page.properties.numberingFormat = value;
-	                }
-	            } else if (name === 'footnote-max-height') {
-	                size = value && (0, _getSize2['default'])(value);
-	                if (size && size.unit) {
-	                    result.footnote.style.maxHeight = size;
-	                }
-	            } else if (name === 'page-height') {
-	                size = value && (0, _getSize2['default'])(value);
-	                if (size && size.unit) {
-	                    result.page.style.height = size;
-	                }
-	            } else if (name === 'page-width') {
-	                size = value && (0, _getSize2['default'])(value);
-	                if (size && size.unit) {
-	                    result.page.style.width = size;
-	                }
 	            } else {
-	                size = value && (0, _getSize2['default'])(value);
-	                if (size && size.unit) {
-	                    result.page.properties[prop] = size;
-	                } else {
-	                    if (/color$/i.test(prop) && value) {
-	                        value = value.toUpperCase();
-	                    }
+	                switch (prop) {
+	                    case 'writingMode':
+	                        result.page.style.direction = value.indexOf('rl') >= 0 ? 'rtl' : 'ltr';
+	                        break;
+	                    case 'printOrientation':
+	                        result.page.properties.isLandscapeOrientation = value === 'landscape';
+	                        break;
+	                    case 'numFormat':
+	                        if (value) {
+	                            result.page.properties.numberingFormat = value;
+	                        }
 
-	                    result.page.properties[prop] = value;
+	                        break;
+	                    case 'footnoteMaxHeight':
+	                        size = value && (0, _getSize2['default'])(value);
+	                        if (size && size.unit) {
+	                            result.footnote.style.maxHeight = size;
+	                        }
+
+	                        break;
+	                    case 'pageHeight':
+	                        size = value && (0, _getSize2['default'])(value);
+	                        if (size && size.unit) {
+	                            result.page.style.height = size;
+	                        }
+
+	                        break;
+	                    case 'pageWidth':
+	                        size = value && (0, _getSize2['default'])(value);
+	                        if (size && size.unit) {
+	                            result.page.style.width = size;
+	                        }
+
+	                        break;
+	                    default:
+	                        size = value && (0, _getSize2['default'])(value);
+	                        if (size && size.unit) {
+	                            result.page.properties[prop] = size;
+	                        } else {
+	                            if (/color$/i.test(prop) && value) {
+	                                value = value.toUpperCase();
+	                            }
+
+	                            result.page.properties[prop] = value;
+	                        }
 	                }
 	            }
 	        });
@@ -1296,7 +1310,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _parseDocumentElement2 = _interopRequireDefault(_parseDocumentElement);
 
 	var Document = _JsFile2['default'].Document;
-	var invalidReadFile = _JsFile2['default'].Engine.errors.invalidReadFile;
+	var _JsFile$Engine = _JsFile2['default'].Engine;
+	var invalidReadFile = _JsFile$Engine.errors.invalidReadFile;
+	var merge = _JsFile$Engine.merge;
+
+	function setPageProperties(page, _ref) {
+	    var style = _ref.style;
+	    var properties = _ref.properties;
+
+	    merge(page.style, style);
+	    merge(page.properties, properties);
+
+	    // TODO: remove when engine will be able to break the pages by content
+	    if (page.style.height) {
+	        page.style.minHeight = page.style.height;
+	        delete page.style.height;
+	    }
+	}
 
 	exports['default'] = function (params) {
 	    return new Promise(function (resolve, reject) {
@@ -1314,10 +1344,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            content: [],
 	            styles: documentData.styles.computed
 	        };
+	        var _documentData$styles$pageLayout = documentData.styles.pageLayout;
+	        var pageLayout = _documentData$styles$pageLayout === undefined ? {} : _documentData$styles$pageLayout;
+	        var _pageLayout$page = pageLayout.page;
+	        var pageProperties = _pageLayout$page === undefined ? {} : _pageLayout$page;
+
 	        var node = xml.querySelector('body text');
+
 	        if (node) {
 	            (function () {
 	                var page = Document.elementPrototype;
+	                setPageProperties(page, pageProperties);
 	                [].forEach.call(node && node.childNodes || [], function (node) {
 	                    var el = (0, _parseDocumentElement2['default'])({
 	                        node: node,
@@ -1328,6 +1365,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        if (el.properties.pageBreak) {
 	                            result.content.push(page);
 	                            page = Document.elementPrototype;
+	                            setPageProperties(page, pageProperties);
 	                        }
 
 	                        page.children.push(el);

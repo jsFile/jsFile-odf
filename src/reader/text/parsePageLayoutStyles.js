@@ -41,39 +41,52 @@ export default function (node) {
                 if (size && size.unit) {
                     result.page.style[prop] = size;
                 }
-            } else if (name === 'writing-mode') {
-                result.page.style.direction = (/rl/ig).test(name) ? 'rtl' : 'ltr';
-            } else if (name === 'print-orientation') {
-                result.page.properties.isLandscapeOrientation = value === 'landscape';
-            } else if (name === 'num-format') {
-                if (value) {
-                    result.page.properties.numberingFormat = value;
-                }
-            } else if (name === 'footnote-max-height') {
-                size = value && getSize(value);
-                if (size && size.unit) {
-                    result.footnote.style.maxHeight = size;
-                }
-            } else if (name === 'page-height') {
-                size = value && getSize(value);
-                if (size && size.unit) {
-                    result.page.style.height = size;
-                }
-            } else if (name === 'page-width') {
-                size = value && getSize(value);
-                if (size && size.unit) {
-                    result.page.style.width = size;
-                }
             } else {
-                size = value && getSize(value);
-                if (size && size.unit) {
-                    result.page.properties[prop] = size;
-                } else {
-                    if (/color$/i.test(prop) && value) {
-                        value = value.toUpperCase();
-                    }
+                switch (prop) {
+                    case 'writingMode':
+                        result.page.style.direction = (value.indexOf('rl') >= 0) ? 'rtl' : 'ltr';
+                        break;
+                    case 'printOrientation':
+                        result.page.properties.isLandscapeOrientation = value === 'landscape';
+                        break;
+                    case 'numFormat':
+                        if (value) {
+                            result.page.properties.numberingFormat = value;
+                        }
 
-                    result.page.properties[prop] = value;
+                        break;
+                    case 'footnoteMaxHeight':
+                        size = value && getSize(value);
+                        if (size && size.unit) {
+                            result.footnote.style.maxHeight = size;
+                        }
+
+                        break;
+                    case 'pageHeight':
+                        size = value && getSize(value);
+                        if (size && size.unit) {
+                            result.page.style.height = size;
+                        }
+
+                        break;
+                    case 'pageWidth':
+                        size = value && getSize(value);
+                        if (size && size.unit) {
+                            result.page.style.width = size;
+                        }
+
+                        break;
+                    default:
+                        size = value && getSize(value);
+                        if (size && size.unit) {
+                            result.page.properties[prop] = size;
+                        } else {
+                            if (/color$/i.test(prop) && value) {
+                                value = value.toUpperCase();
+                            }
+
+                            result.page.properties[prop] = value;
+                        }
                 }
             }
         });
