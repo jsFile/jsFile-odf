@@ -76,6 +76,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _readerCreateDocument2 = _interopRequireDefault(_readerCreateDocument);
 
+	var _polyfill = __webpack_require__(24);
+
+	var _polyfill2 = _interopRequireDefault(_polyfill);
+
 	var validateFile = _JsFile.Engine.validateFile;
 
 	var fileTypes = {
@@ -1848,6 +1852,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	module.exports = exports['default'];
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	if (!String.prototype.includes) {
+	    String.prototype.includes = function () {
+	        return String.prototype.indexOf.apply(this, arguments) !== -1;
+	    };
+	}
+
+	exports["default"] = {};
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ])
