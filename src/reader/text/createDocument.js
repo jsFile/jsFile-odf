@@ -40,7 +40,7 @@ export default function (filesEntry) {
                 this.readFileEntry({
                     file: fileEntry.file,
                     method
-                }).then(result => {
+                }).then((result) => {
                     let xml;
 
                     if (isMediaSource) {

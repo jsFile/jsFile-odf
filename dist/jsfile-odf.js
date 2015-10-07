@@ -1343,8 +1343,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        var result = {
-	            name: fileName,
-	            wordsCount: documentData.documentInfo && documentData.documentInfo.wordsCount || null,
+	            meta: {
+	                name: fileName,
+	                wordsCount: documentData.documentInfo && documentData.documentInfo.wordsCount || null
+	            },
 	            content: [],
 	            styles: documentData.styles.computed
 	        };

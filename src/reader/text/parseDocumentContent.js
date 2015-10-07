@@ -21,9 +21,11 @@ export default function (params) {
             reject(new Error(invalidReadFile));
         }
 
-        let result = {
-            name: fileName,
-            wordsCount: (documentData.documentInfo && documentData.documentInfo.wordsCount) || null,
+        const result = {
+            meta: {
+                name: fileName,
+                wordsCount: (documentData.documentInfo && documentData.documentInfo.wordsCount) || null
+            },
             content: [],
             styles: documentData.styles.computed
         };
