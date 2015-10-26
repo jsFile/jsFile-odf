@@ -1,6 +1,5 @@
 import {Engine, defineEngine} from 'JsFile';
 import createDocument from './reader/createDocument';
-import pf from './polyfill';
 const {validateFile} = Engine;
 
 const fileTypes = {

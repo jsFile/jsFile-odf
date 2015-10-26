@@ -20,6 +20,10 @@ export default function (params) {
         el.properties.tagName = 'SPAN';
 
         switch (localName) {
+            case 'line-break':
+                el.properties.tagName = 'BR';
+                result.children.push(el);
+                break;
             case 'tab':
                 el.properties.textContent = tabAsSpaces;
                 result.children.push(el);
@@ -50,65 +54,69 @@ export default function (params) {
                 result.children.push(el);
                 break;
             case 'frame':
-                let size;
-
-                attrValue = attributes['svg:x'] && attributes['svg:x'].value;
-                if (attrValue) {
-                    size = getSize(attrValue);
-
-                    if (size.unit) {
-                        el.style.left = size;
-                        el.style.position = 'absolute';
-                    }
-                }
-
-                attrValue = attributes['svg:y'] && attributes['svg:y'].value;
-                if (attrValue) {
-                    size = getSize(attrValue);
-
-                    if (size.unit) {
-                        el.style.top = size;
-                        el.style.position = 'absolute';
-                    }
-                }
-
-                attrValue = attributes['svg:width'] && attributes['svg:width'].value;
-                if (attrValue) {
-                    size = getSize(attrValue);
-
-                    if (size.unit) {
-                        el.style.width = size;
-                    }
-                }
-
-                attrValue = attributes['svg:height'] && attributes['svg:height'].value;
-                if (attrValue) {
-                    size = getSize(attrValue);
-
-                    if (size.unit) {
-                        el.style.width = size;
-                    }
-                }
-
-                attrValue = attributes['draw:z-index'] && attributes['draw:z-index'].value;
-                if (!isNaN(attrValue)) {
-                    el.style.zIndex = Number(attrValue);
-                }
-
-                attrValue = attributes['draw:style-name'] && attributes['draw:style-name'].value;
-                if (attrValue) {
-                    el.properties.styleName = attrValue;
-                }
-
                 let img = node.querySelector('image');
                 if (img) {
                     attrValue = img.attributes['xlink:href'] && img.attributes['xlink:href'].value;
                     if (attrValue && documentData && documentData.media) {
+                        el.properties.tagName = 'IMG';
                         el.properties.src = documentData.media[attrValue];
+
+                        let size;
+
+                        attrValue = attributes['svg:x'] && attributes['svg:x'].value;
+                        if (attrValue) {
+                            size = getSize(attrValue);
+
+                            if (size.unit) {
+                                el.style.left = size;
+                                el.style.position = 'absolute';
+                            }
+                        }
+
+                        attrValue = attributes['svg:y'] && attributes['svg:y'].value;
+                        if (attrValue) {
+                            size = getSize(attrValue);
+
+                            if (size.unit) {
+                                el.style.top = size;
+                                el.style.position = 'absolute';
+                            }
+                        }
+
+                        attrValue = attributes['svg:width'] && attributes['svg:width'].value;
+                        if (attrValue) {
+                            size = getSize(attrValue);
+
+                            if (size.unit) {
+                                el.style.width = size;
+                            }
+                        }
+
+                        attrValue = attributes['svg:height'] && attributes['svg:height'].value;
+                        if (attrValue) {
+                            size = getSize(attrValue);
+
+                            if (size.unit) {
+                                el.style.width = size;
+                            }
+                        }
+
+                        attrValue = attributes['draw:z-index'] && attributes['draw:z-index'].value;
+                        if (!isNaN(attrValue)) {
+                            el.style.zIndex = Number(attrValue);
+                        }
+
+                        attrValue = attributes['draw:style-name'] && attributes['draw:style-name'].value;
+                        if (attrValue) {
+                            el.properties.styleName = attrValue;
+                        }
+
+                        result.children.push(el);
                     }
                 }
 
-                result.children.push(el);
+                break;
+            case 'note':
                 break;
             default:
                 el.properties.textContent = textContent;

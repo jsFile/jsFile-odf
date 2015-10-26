@@ -76,10 +76,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _readerCreateDocument2 = _interopRequireDefault(_readerCreateDocument);
 
-	var _polyfill = __webpack_require__(24);
-
-	var _polyfill2 = _interopRequireDefault(_polyfill);
-
 	var validateFile = _JsFile.Engine.validateFile;
 
 	var fileTypes = {
@@ -794,8 +790,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (localName === 'style' || localName === defaultStyleNodeName) {
 	            (function () {
 	                var dest = undefined;
-	                styleName = attributes['style:next-style-name'] && attributes['style:next-style-name'].value;
-	                styleName = styleName || attributes['style:name'] && attributes['style:name'].value;
+	                styleName = attributes['style:name'] && attributes['style:name'].value;
 
 	                if (localName === defaultStyleNodeName || !styleName) {
 	                    dest = result.defaults;
@@ -1487,6 +1482,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        el.properties.tagName = 'SPAN';
 
 	        switch (localName) {
+	            case 'line-break':
+	                el.properties.tagName = 'BR';
+	                result.children.push(el);
+	                break;
 	            case 'tab':
 	                el.properties.textContent = tabAsSpaces;
 	                result.children.push(el);
@@ -1517,65 +1516,69 @@ return /******/ (function(modules) { // webpackBootstrap
 	                result.children.push(el);
 	                break;
 	            case 'frame':
-	                var size = undefined;
-
-	                attrValue = attributes['svg:x'] && attributes['svg:x'].value;
-	                if (attrValue) {
-	                    size = (0, _getSize2['default'])(attrValue);
-
-	                    if (size.unit) {
-	                        el.style.left = size;
-	                        el.style.position = 'absolute';
-	                    }
-	                }
-
-	                attrValue = attributes['svg:y'] && attributes['svg:y'].value;
-	                if (attrValue) {
-	                    size = (0, _getSize2['default'])(attrValue);
-
-	                    if (size.unit) {
-	                        el.style.top = size;
-	                        el.style.position = 'absolute';
-	                    }
-	                }
-
-	                attrValue = attributes['svg:width'] && attributes['svg:width'].value;
-	                if (attrValue) {
-	                    size = (0, _getSize2['default'])(attrValue);
-
-	                    if (size.unit) {
-	                        el.style.width = size;
-	                    }
-	                }
-
-	                attrValue = attributes['svg:height'] && attributes['svg:height'].value;
-	                if (attrValue) {
-	                    size = (0, _getSize2['default'])(attrValue);
-
-	                    if (size.unit) {
-	                        el.style.width = size;
-	                    }
-	                }
-
-	                attrValue = attributes['draw:z-index'] && attributes['draw:z-index'].value;
-	                if (!isNaN(attrValue)) {
-	                    el.style.zIndex = Number(attrValue);
-	                }
-
-	                attrValue = attributes['draw:style-name'] && attributes['draw:style-name'].value;
-	                if (attrValue) {
-	                    el.properties.styleName = attrValue;
-	                }
-
 	                var img = node.querySelector('image');
 	                if (img) {
 	                    attrValue = img.attributes['xlink:href'] && img.attributes['xlink:href'].value;
 	                    if (attrValue && documentData && documentData.media) {
+	                        el.properties.tagName = 'IMG';
 	                        el.properties.src = documentData.media[attrValue];
+
+	                        var size = undefined;
+
+	                        attrValue = attributes['svg:x'] && attributes['svg:x'].value;
+	                        if (attrValue) {
+	                            size = (0, _getSize2['default'])(attrValue);
+
+	                            if (size.unit) {
+	                                el.style.left = size;
+	                                el.style.position = 'absolute';
+	                            }
+	                        }
+
+	                        attrValue = attributes['svg:y'] && attributes['svg:y'].value;
+	                        if (attrValue) {
+	                            size = (0, _getSize2['default'])(attrValue);
+
+	                            if (size.unit) {
+	                                el.style.top = size;
+	                                el.style.position = 'absolute';
+	                            }
+	                        }
+
+	                        attrValue = attributes['svg:width'] && attributes['svg:width'].value;
+	                        if (attrValue) {
+	                            size = (0, _getSize2['default'])(attrValue);
+
+	                            if (size.unit) {
+	                                el.style.width = size;
+	                            }
+	                        }
+
+	                        attrValue = attributes['svg:height'] && attributes['svg:height'].value;
+	                        if (attrValue) {
+	                            size = (0, _getSize2['default'])(attrValue);
+
+	                            if (size.unit) {
+	                                el.style.width = size;
+	                            }
+	                        }
+
+	                        attrValue = attributes['draw:z-index'] && attributes['draw:z-index'].value;
+	                        if (!isNaN(attrValue)) {
+	                            el.style.zIndex = Number(attrValue);
+	                        }
+
+	                        attrValue = attributes['draw:style-name'] && attributes['draw:style-name'].value;
+	                        if (attrValue) {
+	                            el.properties.styleName = attrValue;
+	                        }
+
+	                        result.children.push(el);
 	                    }
 	                }
 
-	                result.children.push(el);
+	                break;
+	            case 'note':
 	                break;
 	            default:
 	                el.properties.textContent = textContent;
@@ -1624,8 +1627,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var attributes = node.attributes;
 
 	    var arrProto = Array.prototype;
-	    var push = arrProto.push;
-	    var map = arrProto.map;
 	    var forEach = arrProto.forEach;
 	    var attrValue = attributes['xml:id'] && attributes['xml:id'].value;
 	    if (attrValue) {
@@ -1633,23 +1634,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    result.properties.className = attributes['text:style-name'] && attributes['text:style-name'].value || '';
-	    push.apply(result.children, map.call(node.querySelectorAll('list-item'), function (node) {
-	        var el = Document.elementPrototype;
-	        el.properties.tagName = 'LI';
+	    forEach.call(node.childNodes || [], function (node) {
+	        if (node.localName === 'list-item') {
+	            (function () {
+	                var el = Document.elementPrototype;
+	                el.properties.tagName = 'LI';
 
-	        forEach.call(node.childNodes || [], function (node) {
-	            var child = (0, _parseDocumentElement2['default'])({
-	                node: node,
-	                documentData: documentData
-	            });
+	                forEach.call(node.childNodes || [], function (node) {
+	                    var child = (0, _parseDocumentElement2['default'])({
+	                        node: node,
+	                        documentData: documentData
+	                    });
 
-	            if (child) {
-	                el.children.push(child);
-	            }
-	        });
+	                    if (child) {
+	                        el.children.push(child);
+	                    }
+	                });
 
-	        return el;
-	    }));
+	                result.children.push(el);
+	            })();
+	        }
+	    });
 
 	    return result;
 	};
@@ -1854,24 +1859,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	module.exports = exports['default'];
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	if (!String.prototype.includes) {
-	    String.prototype.includes = function () {
-	        return String.prototype.indexOf.apply(this, arguments) !== -1;
-	    };
-	}
-
-	exports["default"] = {};
-	module.exports = exports["default"];
 
 /***/ }
 /******/ ])

@@ -57,8 +57,7 @@ function readNodes (i, length, nodes, result, resolve, reject) {
 
         if (localName === 'style' || localName === defaultStyleNodeName) {
             let dest;
-            styleName = (attributes['style:next-style-name'] && attributes['style:next-style-name'].value);
-            styleName = styleName || (attributes['style:name'] && attributes['style:name'].value);
+            styleName = attributes['style:name'] && attributes['style:name'].value;
 
             if (localName === defaultStyleNodeName || !styleName) {
                 dest = result.defaults;

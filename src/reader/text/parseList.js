@@ -13,8 +13,6 @@ export default function (params) {
 
     const {attributes} = node;
     const arrProto = Array.prototype;
-    const push = arrProto.push;
-    const map = arrProto.map;
     const forEach = arrProto.forEach;
     const attrValue = attributes['xml:id'] && attributes['xml:id'].value;
     if (attrValue) {
@@ -22,23 +20,25 @@ export default function (params) {
     }
 
     result.properties.className = attributes['text:style-name'] && attributes['text:style-name'].value || '';
-    push.apply(result.children, map.call(node.querySelectorAll('list-item'), (node) => {
-        const el = Document.elementPrototype;
-        el.properties.tagName = 'LI';
+    forEach.call(node.childNodes || [], (node) => {
+        if (node.localName === 'list-item') {
+            const el = Document.elementPrototype;
+            el.properties.tagName = 'LI';
 
-        forEach.call(node.childNodes || [], (node) => {
-            const child = parseDocumentElement({
-                node,
-                documentData
+            forEach.call(node.childNodes || [], (node) => {
+                const child = parseDocumentElement({
+                    node,
+                    documentData
+                });
+
+                if (child) {
+                    el.children.push(child);
+                }
             });
 
-            if (child) {
-                el.children.push(child);
-            }
-        });
-
-        return el;
-    }));
+            result.children.push(el);
+        }
+    });
 
     return result;
 }
