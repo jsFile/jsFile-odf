@@ -24,8 +24,8 @@ export default function (node) {
             if (size && size.unit) {
                 result.style[prop] = size;
             }
-        } else if (prop === 'color') {
-            result.style.color = normalizeColorValue(value);
+        } else if (prop === 'color' || prop === 'backgroundColor') {
+            result.style[prop] = normalizeColorValue(value);
         } else if (prop === 'fontStyle') {
             result.style[prop] = (/italic/ig).test(value) ? 'italic' : 'normal';
         } else if (prop === 'fontName') {

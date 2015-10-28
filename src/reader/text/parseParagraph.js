@@ -70,6 +70,7 @@ export default function (params) {
                             if (size.unit) {
                                 el.style.left = size;
                                 el.style.position = 'absolute';
+                                el.style.position = 'absolute';
                             }
                         }
 
@@ -79,7 +80,6 @@ export default function (params) {
 
                             if (size.unit) {
                                 el.style.top = size;
-                                el.style.position = 'absolute';
                             }
                         }
 
@@ -97,7 +97,7 @@ export default function (params) {
                             size = getSize(attrValue);
 
                             if (size.unit) {
-                                el.style.width = size;
+                                el.style.height = size;
                             }
                         }
 

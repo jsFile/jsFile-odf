@@ -1192,15 +1192,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var name = _attr$name === undefined ? '' : _attr$name;
 
 	        var prop = name && formatPropertyName(name);
+	        var size = undefined;
 
 	        if (prop.includes('padding') || prop.includes('margin')) {
-	            var size = value && (0, _getSize2['default'])(value);
+	            size = value && (0, _getSize2['default'])(value);
 
-	            if (size && size.unit) {
+	            if (size.unit) {
 	                result.style[prop] = size;
 	            }
 	        } else if (prop === 'backgroundColor') {
 	            result.style[prop] = normalizeColorValue(value);
+	        } else if (prop.includes('border')) {
+	            var borderData = value.split(' ');
+	            size = borderData[0] && (0, _getSize2['default'])(borderData[0]);
+
+	            if (borderData.length === 3 && size.unit) {
+	                /**
+	                 * @description minimal visible size for borders in inches
+	                 * @type {number}
+	                 */
+	                var minimalVisibleSize = 0.02;
+
+	                /**
+	                 * Browser can't render too thin borders, as 0.0008in.
+	                 * So, here is the normalization of border width if it's not a 0.
+	                 */
+	                if (size.value && size.value < minimalVisibleSize) {
+	                    size.value = minimalVisibleSize;
+	                }
+
+	                result.style[prop + 'Width'] = size;
+	                result.style[prop + 'Style'] = borderData[1];
+	                result.style[prop + 'Color'] = normalizeColorValue(borderData[2]);
+	            }
 	        } else if (prop === 'writingMode') {
 	            result.style.direction = /rl/i.test(value) ? 'rtl' : 'ltr';
 	        } else if (prop === 'textAlign') {
@@ -1268,8 +1292,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (size && size.unit) {
 	                result.style[prop] = size;
 	            }
-	        } else if (prop === 'color') {
-	            result.style.color = normalizeColorValue(value);
+	        } else if (prop === 'color' || prop === 'backgroundColor') {
+	            result.style[prop] = normalizeColorValue(value);
 	        } else if (prop === 'fontStyle') {
 	            result.style[prop] = /italic/ig.test(value) ? 'italic' : 'normal';
 	        } else if (prop === 'fontName') {
@@ -1532,6 +1556,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            if (size.unit) {
 	                                el.style.left = size;
 	                                el.style.position = 'absolute';
+	                                el.style.position = 'absolute';
 	                            }
 	                        }
 
@@ -1541,7 +1566,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                            if (size.unit) {
 	                                el.style.top = size;
-	                                el.style.position = 'absolute';
 	                            }
 	                        }
 
@@ -1559,7 +1583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            size = (0, _getSize2['default'])(attrValue);
 
 	                            if (size.unit) {
-	                                el.style.width = size;
+	                                el.style.height = size;
 	                            }
 	                        }
 
