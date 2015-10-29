@@ -2,7 +2,7 @@ import JsFile from 'JsFile';
 const {Document} = JsFile;
 
 export default function (params) {
-    let result = Document.elementPrototype;
+    const result = Document.elementPrototype;
     const {node, documentData, parseDocumentElement} = params;
     result.properties.tagName = 'UL';
     result.style.listStyle = 'none';

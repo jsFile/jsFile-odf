@@ -1,10 +1,9 @@
 import JsFile from 'JsFile';
-import parseDocumentElement from './parseDocumentElement';
 const {Document} = JsFile;
 
 export default function (params) {
     const result = Document.elementPrototype;
-    const {node, documentData} = params;
+    const {node, documentData, parseDocumentElement} = params;
     result.properties.tagName = 'UL';
 
     if (!node) {

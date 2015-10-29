@@ -31,12 +31,30 @@ const parsers = {
     },
     'paragraph-properties': {
         name: 'paragraph',
-        selector: 'p',
+        selector(styleName) {
+            let className = '';
+
+            if (styleName) {
+                className = `.${styleName}`;
+            }
+
+            return `p${className}`;
+        },
+
         exec: parseParagraphProperties
     },
     'text-properties': {
         name: 'text',
-        selector: 'p',
+        selector(styleName) {
+            let className = '';
+
+            if (styleName) {
+                className = `.${styleName}`;
+            }
+
+            return `span${className}, ${className || 'p'} span`;
+        },
+
         exec: parseTextProperties
     }
 };
@@ -70,9 +88,18 @@ function readNodes (i, length, nodes, result, resolve, reject) {
                 const {exec, selector, name} = parsers[node.localName] || {};
                 if (exec && name) {
                     const data = exec(node);
+                    let elSelector;
+
                     dest[name] = isNew ? data : merge(dest[name], data);
+
+                    if (typeof selector === 'function') {
+                        elSelector = selector(styleName);
+                    } else {
+                        elSelector = styleName ? `.${styleName}` : selector;
+                    }
+
                     result.computed.push({
-                        selector: styleName ? `.${styleName}` : selector,
+                        selector: elSelector,
                         properties: dest[name].style
                     });
                 }

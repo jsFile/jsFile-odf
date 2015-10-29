@@ -762,12 +762,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    'paragraph-properties': {
 	        name: 'paragraph',
-	        selector: 'p',
+	        selector: function selector(styleName) {
+	            var className = '';
+
+	            if (styleName) {
+	                className = '.' + styleName;
+	            }
+
+	            return 'p' + className;
+	        },
+
 	        exec: _parseParagraphProperties2['default']
 	    },
 	    'text-properties': {
 	        name: 'text',
-	        selector: 'p',
+	        selector: function selector(styleName) {
+	            var className = '';
+
+	            if (styleName) {
+	                className = '.' + styleName;
+	            }
+
+	            return 'span' + className + ', ' + (className || 'p') + ' span';
+	        },
+
 	        exec: _parseTextProperties2['default']
 	    }
 	};
@@ -808,9 +826,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    if (exec && name) {
 	                        var data = exec(node);
+	                        var elSelector = undefined;
+
 	                        dest[name] = isNew ? data : merge(dest[name], data);
+
+	                        if (typeof selector === 'function') {
+	                            elSelector = selector(styleName);
+	                        } else {
+	                            elSelector = styleName ? '.' + styleName : selector;
+	                        }
+
 	                        result.computed.push({
-	                            selector: styleName ? '.' + styleName : selector,
+	                            selector: elSelector,
 	                            properties: dest[name].style
 	                        });
 	                    }
@@ -1439,11 +1466,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseHeading2 = _interopRequireDefault(_parseHeading);
 
+	var _parseSection = __webpack_require__(24);
+
+	var _parseSection2 = _interopRequireDefault(_parseSection);
+
 	var parsers = {
 	    p: _parseParagraph2['default'],
 	    h: _parseHeading2['default'],
 	    list: _parseList2['default'],
 	    table: _parseTable2['default'],
+	    section: _parseSection2['default'],
 	    'table-of-content': _parseTableOfContent2['default']
 	};
 
@@ -1631,16 +1663,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseDocumentElement = __webpack_require__(18);
-
-	var _parseDocumentElement2 = _interopRequireDefault(_parseDocumentElement);
-
 	var Document = _JsFile2['default'].Document;
 
 	exports['default'] = function (params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
 	    var documentData = params.documentData;
+	    var parseDocumentElement = params.parseDocumentElement;
 
 	    result.properties.tagName = 'UL';
 
@@ -1665,7 +1694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                el.properties.tagName = 'LI';
 
 	                forEach.call(node.childNodes || [], function (node) {
-	                    var child = (0, _parseDocumentElement2['default'])({
+	                    var child = parseDocumentElement({
 	                        node: node,
 	                        documentData: documentData
 	                    });
@@ -1707,6 +1736,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Document = _JsFile2['default'].Document;
 
+	var arrProto = Array.prototype;
+	var push = arrProto.push;
+	var map = arrProto.map;
+	var forEach = arrProto.forEach;
+
 	exports['default'] = function (params) {
 	    var node = params.node;
 	    var documentData = params.documentData;
@@ -1724,7 +1758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    tbody.properties.tagName = 'TBODY';
 	    result.properties.className = node.attributes['table:style-name'] && node.attributes['table:style-name'].value || '';
 
-	    [].forEach.call(node && node.childNodes || [], function (node) {
+	    forEach.call(node && node.childNodes || [], function (node) {
 	        var localName = node.localName;
 
 	        if (localName === 'table-row') {
@@ -1733,8 +1767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                documentData: documentData
 	            }));
 	        } else if (localName === 'table-header-rows') {
-	            var arrProto = Array.prototype;
-	            arrProto.push.apply(thead.children, arrProto.map.call(node.querySelectorAll('table-row'), function (node) {
+	            push.apply(thead.children, map.call(node.querySelectorAll('table-row'), function (node) {
 	                return parseTableRow({
 	                    head: true,
 	                    node: node,
@@ -1749,9 +1782,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	function parseTableRow(params) {
-	    var arrProto = Array.prototype;
-	    var push = arrProto.push;
-	    var map = arrProto.map;
 	    var result = Document.elementPrototype;
 	    var node = params.node;
 	    var documentData = params.documentData;
@@ -1768,6 +1798,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                documentData: documentData
 	            });
 	        }));
+
+	        return el;
 	    }));
 
 	    return result;
@@ -1878,6 +1910,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    result.properties.textContent = textContent;
+
+	    return result;
+	};
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _JsFile = __webpack_require__(1);
+
+	var _JsFile2 = _interopRequireDefault(_JsFile);
+
+	var Document = _JsFile2['default'].Document;
+
+	exports['default'] = function (params) {
+	    var result = Document.elementPrototype;
+	    var node = params.node;
+	    var documentData = params.documentData;
+	    var parseDocumentElement = params.parseDocumentElement;
+
+	    [].forEach.call(node.childNodes || [], function (node) {
+	        var child = parseDocumentElement({
+	            node: node,
+	            documentData: documentData
+	        });
+
+	        if (child) {
+	            result.children.push(child);
+	        }
+	    });
 
 	    return result;
 	};
