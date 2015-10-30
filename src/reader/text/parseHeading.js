@@ -4,7 +4,6 @@ const {Document} = JsFile;
 export default function (params) {
     let result = Document.elementPrototype;
     const {node} = params;
-    result.properties.tagName = 'SPAN';
 
     if (!node) {
         return result;

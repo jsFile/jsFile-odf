@@ -1790,6 +1790,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    result.properties.tagName = 'TR';
 	    push.apply(result.children, map.call(node.querySelectorAll('table-cell'), function (node) {
 	        var el = Document.elementPrototype;
+
 	        el.properties.className = node.attributes['table:style-name'] && node.attributes['table:style-name'].value || '';
 	        el.properties.tagName = head ? 'TH' : 'TD';
 	        push.apply(el.children, map.call(node.querySelectorAll('p'), function (node) {
@@ -1887,8 +1888,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function (params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
-
-	    result.properties.tagName = 'SPAN';
 
 	    if (!node) {
 	        return result;
