@@ -1549,6 +1549,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            case 'soft-page-break':
 	                result.properties.pageBreak = true;
 	                break;
+	            case 'bookmark':
+	                var linkName = attributes['text:name'] && attributes['text:name'].value;
+
+	                if (linkName) {
+	                    el.properties.tagName = 'A';
+	                    el.properties.name = linkName;
+	                    result.children.push(el);
+	                }
+
+	                break;
 	            case 'a':
 	            case 'span':
 	                if (localName === 'span') {
@@ -1566,7 +1576,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 
 	                [].forEach.call(node && node.childNodes || [], function (child) {
-	                    el.properties.textContent += child.textContent || '';
+	                    var localName = child.localName;
+
+	                    if (localName === 'tab') {
+	                        el.properties.textContent += tabAsSpaces;
+	                    } else {
+	                        el.properties.textContent += child.textContent || '';
+	                    }
 	                });
 
 	                result.children.push(el);
@@ -1883,34 +1899,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
+	var _parseParagraph = __webpack_require__(19);
+
+	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
+
 	var Document = _JsFile2['default'].Document;
 
 	exports['default'] = function (params) {
-	    var result = Document.elementPrototype;
+	    var baseEl = Document.elementPrototype;
 	    var node = params.node;
 
 	    if (!node) {
-	        return result;
+	        return baseEl;
 	    }
 
-	    var _node$attributes = node.attributes;
-	    var attributes = _node$attributes === undefined ? {} : _node$attributes;
-	    var _node$textContent = node.textContent;
-	    var textContent = _node$textContent === undefined ? '' : _node$textContent;
+	    var el = (0, _parseParagraph2['default'])(params);
+	    el.properties.tagName = baseEl.properties.tagName;
 
-	    var attrValue = attributes['text:style-name'] && attributes['text:style-name'].value;
-	    if (attrValue) {
-	        result.properties.className = attrValue;
-	    }
-
-	    attrValue = attributes['text:outline-level'] && attributes['text:outline-level'].value;
-	    if (attrValue) {
-	        result.properties.outlineLevel = attrValue;
-	    }
-
-	    result.properties.textContent = textContent;
-
-	    return result;
+	    return el;
 	};
 
 	module.exports = exports['default'];

@@ -1,26 +1,17 @@
 import JsFile from 'JsFile';
+import parseParagraph from './parseParagraph';
 const {Document} = JsFile;
 
 export default function (params) {
-    let result = Document.elementPrototype;
+    let baseEl = Document.elementPrototype;
     const {node} = params;
 
     if (!node) {
-        return result;
+        return baseEl;
     }
 
-    const {attributes = {}, textContent = ''} = node;
-    let attrValue = attributes['text:style-name'] && attributes['text:style-name'].value;
-    if (attrValue) {
-        result.properties.className = attrValue;
-    }
+    const el = parseParagraph(params);
+    el.properties.tagName = baseEl.properties.tagName;
 
-    attrValue = attributes['text:outline-level'] && attributes['text:outline-level'].value;
-    if (attrValue) {
-        result.properties.outlineLevel = attrValue;
-    }
-
-    result.properties.textContent = textContent;
-
-    return result;
+    return el;
 }

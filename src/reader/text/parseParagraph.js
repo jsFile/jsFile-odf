@@ -31,6 +31,16 @@ export default function (params) {
             case 'soft-page-break':
                 result.properties.pageBreak = true;
                 break;
+            case 'bookmark':
+                const linkName = attributes['text:name'] && attributes['text:name'].value;
+
+                if (linkName) {
+                    el.properties.tagName = 'A';
+                    el.properties.name = linkName;
+                    result.children.push(el);
+                }
+
+                break;
             case 'a':
             case 'span':
                 if (localName === 'span') {
@@ -48,7 +58,13 @@ export default function (params) {
                 }
 
                 [].forEach.call(node && node.childNodes || [], (child) => {
-                    el.properties.textContent += child.textContent || '';
+                    const {localName} = child;
+
+                    if (localName === 'tab') {
+                        el.properties.textContent += tabAsSpaces;
+                    } else {
+                        el.properties.textContent += child.textContent || '';
+                    }
                 });
 
                 result.children.push(el);
