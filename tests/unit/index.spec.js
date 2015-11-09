@@ -19,6 +19,10 @@ describe('jsFile-odf', () => {
         assert.isFunction(OdfEngine);
     });
 
+    it('should have files for testing', () => {
+        assert.notEqual(Object.keys(files || {}).length, 0);
+    });
+
     it('should read the file', function () {
         this.timeout(50000);
         const queue = [];
