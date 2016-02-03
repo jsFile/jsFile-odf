@@ -1,13 +1,11 @@
 /**
- *
- * @param node
- * @return {Object}
+ * return {Object}
  * @private
  */
-export default function (node) {
+export default function parseTableRowProperties () {
     let result = {
         style: {}
     };
 
     return result;
-};
+}

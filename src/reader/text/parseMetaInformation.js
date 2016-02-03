@@ -1,7 +1,7 @@
 import JsFile from 'JsFile';
 const {formatPropertyName} = JsFile.Engine;
 
-export default function (xml) {
+export default function parseMetaInformation (xml) {
     const result = {
         documentInfo: {},
         appInfo: {}

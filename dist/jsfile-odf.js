@@ -56,27 +56,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 	var _JsFile = __webpack_require__(1);
 
-	var _readerCreateDocument = __webpack_require__(2);
+	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _readerCreateDocument2 = _interopRequireDefault(_readerCreateDocument);
+	var _createDocument = __webpack_require__(2);
 
-	var validateFile = _JsFile.Engine.validateFile;
+	var _createDocument2 = _interopRequireDefault(_createDocument);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Engine = _JsFile2.default.Engine;
+	var defineEngine = _JsFile2.default.defineEngine;
+	var validateFile = Engine.validateFile;
 
 	var fileTypes = {
 	    textFiles: {
@@ -161,17 +165,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 
-	var OdfEngine = (function (_Engine) {
+	var OdfEngine = function (_Engine) {
 	    _inherits(OdfEngine, _Engine);
 
 	    function OdfEngine() {
 	        _classCallCheck(this, OdfEngine);
 
-	        _get(Object.getPrototypeOf(OdfEngine.prototype), 'constructor', this).apply(this, arguments);
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(OdfEngine).apply(this, arguments));
 
-	        this.createDocument = _readerCreateDocument2['default'];
-	        this.parser = 'readArchive';
-	        this.files = files;
+	        _this.createDocument = _createDocument2.default;
+	        _this.parser = 'readArchive';
+	        _this.files = files;
+	        return _this;
 	    }
 
 	    _createClass(OdfEngine, [{
@@ -184,19 +189,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        value: function test(file) {
 	            return Boolean(file && validateFile(file, files));
 	        }
-	    }, {
-	        key: 'mimeTypes',
-	        value: files.mime.slice(0),
-	        enumerable: true
 	    }]);
 
 	    return OdfEngine;
-	})(_JsFile.Engine);
+	}(Engine);
 
-	(0, _JsFile.defineEngine)(OdfEngine);
+	OdfEngine.mimeTypes = files.mime.slice(0);
+	defineEngine(OdfEngine);
 
-	exports['default'] = OdfEngine;
-	module.exports = exports['default'];
+	exports.default = OdfEngine;
 
 /***/ },
 /* 1 */
@@ -210,33 +211,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = createDocument;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _textCreateDocument = __webpack_require__(3);
+	var _createDocument = __webpack_require__(3);
 
-	var _textCreateDocument2 = _interopRequireDefault(_textCreateDocument);
+	var _createDocument2 = _interopRequireDefault(_createDocument);
 
-	var Document = _JsFile2['default'].Document;
-	var errors = _JsFile2['default'].Engine.errors;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports['default'] = function (data) {
+	var errors = _JsFile2.default.Engine.errors;
+	function createDocument() {
 	    if (this.isTextFile()) {
-	        return _textCreateDocument2['default'].apply(this, arguments);
+	        return _createDocument2.default.apply(this, arguments);
 	    }
 
 	    return Promise.reject(errors.invalidFileType);
-	};
-
-	;
-	module.exports = exports['default'];
+	}
 
 /***/ },
 /* 3 */
@@ -244,11 +241,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = createDocument;
 
 	var _JsFile = __webpack_require__(1);
 
@@ -262,12 +258,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseStyles2 = _interopRequireDefault(_parseStyles);
 
-	var _parseDocumentContent = __webpack_require__(17);
+	var _parseDocumentContent = __webpack_require__(16);
 
 	var _parseDocumentContent2 = _interopRequireDefault(_parseDocumentContent);
 
-	var Document = _JsFile2['default'].Document;
-	var normalizeDataUri = _JsFile2['default'].Engine.normalizeDataUri;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Document = _JsFile2.default.Document;
+	var normalizeDataUri = _JsFile2.default.Engine.normalizeDataUri;
 
 	/**
 	 *
@@ -275,80 +273,78 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 */
 
-	exports['default'] = function (filesEntry) {
-	    return new Promise((function (resolve, reject) {
-	        var _this = this;
+	function createDocument(filesEntry) {
+	    var _this = this;
 
-	        var domParser = new DOMParser();
-	        var queue = [];
-	        var document = undefined;
-	        var documentData = {
-	            documentInfo: {},
-	            appInfo: {},
-	            styles: {},
-	            media: {}
-	        };
+	    var domParser = new DOMParser();
+	    var queue = [];
+	    var document = undefined;
+	    var documentData = {
+	        documentInfo: {},
+	        appInfo: {},
+	        styles: {},
+	        media: {}
+	    };
 
-	        filesEntry.forEach(function (fileEntry) {
-	            var method = undefined;
-	            var filename = fileEntry.entry.filename;
-	            var isMediaSource = undefined;
+	    filesEntry.forEach(function (fileEntry) {
+	        var method = undefined;
+	        var filename = fileEntry.entry.filename;
+	        var isMediaSource = undefined;
 
-	            if (!fileEntry.file) {
-	                return;
-	            }
+	        if (!fileEntry.file) {
+	            return;
+	        }
 
-	            isMediaSource = Boolean(filename && filename.includes('Pictures/'));
+	        isMediaSource = Boolean(filename && filename.includes('Pictures/'));
+	        if (isMediaSource) {
+	            method = 'readAsDataURL';
+	        }
+
+	        var promise = _this.readFileEntry({
+	            file: fileEntry.file,
+	            method: method
+	        }).then(function (result) {
+	            var xml = undefined;
+
 	            if (isMediaSource) {
-	                method = 'readAsDataURL';
+	                documentData.media[filename] = normalizeDataUri(result, filename);
+	            } else {
+	                xml = domParser.parseFromString(result, 'application/xml');
+
+	                if (filename.includes('styles.')) {
+	                    return (0, _parseStyles2.default)(xml).then(function (styles) {
+	                        return documentData.styles = styles;
+	                    });
+	                }
+
+	                if (filename.includes('meta.')) {
+	                    var info = (0, _parseMetaInformation2.default)(xml);
+	                    documentData.documentInfo = info.documentInfo;
+	                    documentData.appInfo = info.appInfo;
+	                } else if (filename.includes('content.')) {
+	                    document = xml;
+	                }
 	            }
+	        });
 
-	            queue.push(new Promise((function (resolve, reject) {
-	                this.readFileEntry({
-	                    file: fileEntry.file,
-	                    method: method
-	                }).then(function (result) {
-	                    var xml = undefined;
+	        queue.push(promise);
+	    }, this);
 
-	                    if (isMediaSource) {
-	                        documentData.media[filename] = normalizeDataUri(result, filename);
-	                        resolve();
-	                    } else {
-	                        xml = domParser.parseFromString(result, 'application/xml');
+	    return Promise.all(queue).then(function () {
+	        var promise = (0, _parseDocumentContent2.default)({
+	            xml: document,
+	            documentData: documentData,
+	            fileName: _this.fileName
+	        }).then(function (result) {
+	            return new Document(result);
+	        });
 
-	                        if (filename.includes('styles.')) {
-	                            (0, _parseStyles2['default'])(xml).then(function (styles) {
-	                                return documentData.styles = styles;
-	                            }, reject);
-	                        } else if (filename.includes('meta.')) {
-	                            var info = (0, _parseMetaInformation2['default'])(xml);
-	                            documentData.documentInfo = info.documentInfo;
-	                            documentData.appInfo = info.appInfo;
-	                        } else if (filename.includes('content.')) {
-	                            document = xml;
-	                        }
+	        documentData = null;
+	        document = null;
 
-	                        resolve();
-	                    }
-	                }, reject);
-	            }).bind(_this)));
-	        }, this);
-
-	        Promise.all(queue).then((function () {
-	            (0, _parseDocumentContent2['default'])({
-	                xml: document,
-	                documentData: documentData,
-	                fileName: this.fileName
-	            }).then(function (result) {
-	                resolve(new Document(result));
-	            }, reject);
-
-	            documentData = document = null;
-	        }).bind(this), reject);
-	    }).bind(this));
-	};
-
-	module.exports = exports['default'];
+	        return promise;
+	    });
+	}
 
 /***/ },
 /* 4 */
@@ -356,19 +352,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseMetaInformation;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var formatPropertyName = _JsFile2['default'].Engine.formatPropertyName;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports['default'] = function (xml) {
+	var formatPropertyName = _JsFile2.default.Engine.formatPropertyName;
+	function parseMetaInformation(xml) {
 	    var result = {
 	        documentInfo: {},
 	        appInfo: {}
@@ -419,9 +415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
 /* 5 */
@@ -429,11 +423,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseStyles;
 
 	var _parsePageLayoutStyles = __webpack_require__(6);
 
@@ -443,46 +436,44 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _parseStylesNode2 = _interopRequireDefault(_parseStylesNode);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	/**
 	 *
 	 * @param xml
-	 * @returns {*}
+	 * @returns {Promise}
 	 * @private
 	 */
+	function parseStyles(xml) {
+	    var pageLayoutName = undefined;
+	    var layouts = {};
+	    var firstPageLayout = '';
+	    var node = xml.querySelector('master-styles master-page');
+	    if (node) {
+	        var attrValue = node.attributes['style:page-layout-name'] && node.attributes['style:page-layout-name'].value;
+	        if (attrValue) {
+	            pageLayoutName = attrValue;
+	        }
+	    }
 
-	exports['default'] = function (xml) {
-	    return new Promise(function (resolve, reject) {
-	        var pageLayoutName = undefined;
-	        var layouts = {};
-	        var firstPageLayout = '';
-	        var node = xml.querySelector('master-styles master-page');
-	        if (node) {
-	            var attrValue = node.attributes['style:page-layout-name'] && node.attributes['style:page-layout-name'].value;
-	            if (attrValue) {
-	                pageLayoutName = attrValue;
+	    [].forEach.call(xml.querySelectorAll('automatic-styles page-layout'), function (node) {
+	        var attrValue = node.attributes['style:name'] && node.attributes['style:name'].value;
+	        if (attrValue) {
+	            layouts[attrValue] = (0, _parsePageLayoutStyles2.default)(node);
+
+	            if (!firstPageLayout) {
+	                firstPageLayout = attrValue;
 	            }
 	        }
-
-	        [].forEach.call(xml.querySelectorAll('automatic-styles page-layout'), function (node) {
-	            var attrValue = node.attributes['style:name'] && node.attributes['style:name'].value;
-	            if (attrValue) {
-	                layouts[attrValue] = (0, _parsePageLayoutStyles2['default'])(node);
-
-	                if (!firstPageLayout) {
-	                    firstPageLayout = attrValue;
-	                }
-	            }
-	        });
-
-	        var pageLayout = layouts[pageLayoutName] || layouts[firstPageLayout];
-	        (0, _parseStylesNode2['default'])(xml.querySelector('styles')).then(function (result) {
-	            result.pageLayout = pageLayout;
-	            resolve(result);
-	        }, reject);
 	    });
-	};
 
-	module.exports = exports['default'];
+	    var pageLayout = layouts[pageLayoutName] || layouts[firstPageLayout];
+
+	    return (0, _parseStylesNode2.default)(xml.querySelector('styles')).then(function (result) {
+	        result.pageLayout = pageLayout;
+	        return result;
+	    });
+	}
 
 /***/ },
 /* 6 */
@@ -490,11 +481,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parsePageLayoutStyles;
 
 	var _JsFile = __webpack_require__(1);
 
@@ -504,7 +494,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getSize2 = _interopRequireDefault(_getSize);
 
-	var _JsFile$Engine = _JsFile2['default'].Engine;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _JsFile$Engine = _JsFile2.default.Engine;
 	var formatPropertyName = _JsFile$Engine.formatPropertyName;
 	var normalizeColorValue = _JsFile$Engine.normalizeColorValue;
 
@@ -515,7 +507,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 */
 
-	exports['default'] = function (node) {
+	function parsePageLayoutStyles(node) {
 	    var result = {
 	        page: {
 	            style: {},
@@ -547,7 +539,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var prop = name && formatPropertyName(name);
 
 	            if (prop.includes('padding') || prop.includes('margin')) {
-	                size = value && (0, _getSize2['default'])(value);
+	                size = value && (0, _getSize2.default)(value);
 
 	                if (size && size.unit) {
 	                    result.page.style[prop] = size;
@@ -567,28 +559,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                        break;
 	                    case 'footnoteMaxHeight':
-	                        size = value && (0, _getSize2['default'])(value);
+	                        size = value && (0, _getSize2.default)(value);
 	                        if (size && size.unit) {
 	                            result.footnote.style.maxHeight = size;
 	                        }
 
 	                        break;
 	                    case 'pageHeight':
-	                        size = value && (0, _getSize2['default'])(value);
+	                        size = value && (0, _getSize2.default)(value);
 	                        if (size && size.unit) {
 	                            result.page.style.height = size;
 	                        }
 
 	                        break;
 	                    case 'pageWidth':
-	                        size = value && (0, _getSize2['default'])(value);
+	                        size = value && (0, _getSize2.default)(value);
 	                        if (size && size.unit) {
 	                            result.page.style.width = size;
 	                        }
 
 	                        break;
 	                    default:
-	                        size = value && (0, _getSize2['default'])(value);
+	                        size = value && (0, _getSize2.default)(value);
 	                        if (size && size.unit) {
 	                            result.page.properties[prop] = size;
 	                        } else {
@@ -605,19 +597,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        [].forEach.call(node.childNodes || [], function (node) {
 	            if (node.localName === 'footnote-sep') {
 	                var attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
-	                var size = attrValue && (0, _getSize2['default'])(attrValue);
+	                var size = attrValue && (0, _getSize2.default)(attrValue);
 	                if (size && size.unit) {
 	                    result.footnote.style.width = size;
 	                }
 
 	                attrValue = node.attributes['style:distance-before-sep'] && node.attributes['style:distance-before-sep'].value;
-	                size = attrValue && (0, _getSize2['default'])(attrValue);
+	                size = attrValue && (0, _getSize2.default)(attrValue);
 	                if (size && size.unit) {
 	                    result.footnote.style.marginTop = size;
 	                }
 
 	                attrValue = node.attributes['style:distance-after-sep'] && node.attributes['style:distance-after-sep'].value;
-	                size = attrValue && (0, _getSize2['default'])(attrValue);
+	                size = attrValue && (0, _getSize2.default)(attrValue);
 	                if (size && size.unit) {
 	                    result.footnote.style.marginBottom = size;
 	                }
@@ -642,10 +634,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return result;
-	};
-
-	;
-	module.exports = exports['default'];
+	}
 
 /***/ },
 /* 7 */
@@ -653,9 +642,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.default = getSize;
 	var masks = [/^([0-9]*[0-9][0-9]*(?:\.[0-9]*)?|0+\.[0-9]*[1-9][0-9]*|\.[0-9]*[1-9][0-9]*)((cm)|(mm)|(in)|(pt)|(pc)|(px))$/, /^-?([0-9]+(?:\.[0-9]*)?|\.[0-9]+)(%)$/];
 
 	/**
@@ -664,8 +654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {{value: number, unit: string}}
 	 * @private
 	 */
-
-	exports['default'] = function (val) {
+	function getSize(val) {
 	    var result = {
 	        value: 0,
 	        unit: ''
@@ -687,10 +676,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return result;
-	};
-
-	;
-	module.exports = exports['default'];
+	}
 
 /***/ },
 /* 8 */
@@ -698,67 +684,65 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseStylesNode;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseListProperties = __webpack_require__(9);
-
-	var _parseListProperties2 = _interopRequireDefault(_parseListProperties);
-
-	var _parseTableProperties = __webpack_require__(10);
+	var _parseTableProperties = __webpack_require__(9);
 
 	var _parseTableProperties2 = _interopRequireDefault(_parseTableProperties);
 
-	var _parseTableColumnProperties = __webpack_require__(11);
+	var _parseTableColumnProperties = __webpack_require__(10);
 
 	var _parseTableColumnProperties2 = _interopRequireDefault(_parseTableColumnProperties);
 
-	var _parseTableCellProperties = __webpack_require__(12);
+	var _parseTableCellProperties = __webpack_require__(11);
 
 	var _parseTableCellProperties2 = _interopRequireDefault(_parseTableCellProperties);
 
-	var _parseTableRowProperties = __webpack_require__(14);
+	var _parseTableRowProperties = __webpack_require__(13);
 
 	var _parseTableRowProperties2 = _interopRequireDefault(_parseTableRowProperties);
 
-	var _parseParagraphProperties = __webpack_require__(15);
+	var _parseParagraphProperties = __webpack_require__(14);
 
 	var _parseParagraphProperties2 = _interopRequireDefault(_parseParagraphProperties);
 
-	var _parseTextProperties = __webpack_require__(16);
+	var _parseTextProperties = __webpack_require__(15);
 
 	var _parseTextProperties2 = _interopRequireDefault(_parseTextProperties);
 
-	var merge = _JsFile2['default'].Engine.merge;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	//import parseListProperties from './parseListProperties';
+	var merge = _JsFile2.default.Engine.merge;
 
 	var defaultStyleNodeName = 'default-style';
 	var parsers = {
 	    'table-properties': {
 	        name: 'table',
 	        selector: 'table',
-	        exec: _parseTableProperties2['default']
+	        exec: _parseTableProperties2.default
 	    },
 	    'table-column-properties': {
 	        name: 'tableColumn',
 	        selector: 'td',
-	        exec: _parseTableColumnProperties2['default']
+	        exec: _parseTableColumnProperties2.default
 	    },
 	    'table-cell-properties': {
 	        name: 'tableCell',
 	        selector: 'td',
-	        exec: _parseTableCellProperties2['default']
+	        exec: _parseTableCellProperties2.default
 	    },
 	    'table-row-properties': {
 	        name: 'tableRow',
 	        selector: 'tr',
-	        exec: _parseTableRowProperties2['default']
+	        exec: _parseTableRowProperties2.default
 	    },
 	    'paragraph-properties': {
 	        name: 'paragraph',
@@ -772,7 +756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return 'p' + className;
 	        },
 
-	        exec: _parseParagraphProperties2['default']
+	        exec: _parseParagraphProperties2.default
 	    },
 	    'text-properties': {
 	        name: 'text',
@@ -786,9 +770,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return 'span' + className + ', ' + (className || 'p') + ' span';
 	        },
 
-	        exec: _parseTextProperties2['default']
+	        exec: _parseTextProperties2.default
 	    }
 	};
+
 	var forEach = [].forEach;
 
 	function readNodes(i, length, nodes, result, resolve, reject) {
@@ -798,7 +783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        size = length;
 	    }
 
-	    var _loop = function () {
+	    var _loop = function _loop() {
 	        var styleName = undefined;
 	        var isNew = true;
 	        var node = nodes[i];
@@ -867,7 +852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	}
 
-	exports['default'] = function (node, result) {
+	function parseStylesNode(node) {
 	    return new Promise(function (resolve, reject) {
 	        var nodes = node && node.childNodes || [];
 	        var result = {
@@ -875,65 +860,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            named: {},
 	            computed: []
 	        };
+
 	        readNodes(0, nodes.length, nodes, result, resolve, reject);
 	    });
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
 /* 9 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	var listStyleTypes = {
-	    1: 'decimal',
-	    i: 'lower-roman',
-	    I: 'upper-roman',
-	    a: 'lower-alpha',
-	    A: 'upper-alpha'
-	};
-
-	exports['default'] = function (xml) {
-	    var result = {
-	        style: {}
-	    };
-	    var nodes = xml && xml.childNodes || [];
-	    var i = nodes.length;
-
-	    while (i--) {
-	        if (nodes[i].localName === 'list-level-style-number') {
-	            var attr = nodes[i].attributes['style:num-format'];
-
-	            result.style.listStyleType = attr && listStyleTypes[attr.value] || 'auto';
-	        }
-	    }
-
-	    return result;
-	};
-
-	;
-	module.exports = exports['default'];
-
-/***/ },
-/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseTableProperties;
 
 	var _getSize = __webpack_require__(7);
 
 	var _getSize2 = _interopRequireDefault(_getSize);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 *
@@ -941,8 +888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {Object}
 	 * @private
 	 */
-
-	exports['default'] = function (node) {
+	function parseTableProperties(node) {
 	    var result = {
 	        style: {}
 	    };
@@ -950,7 +896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (node) {
 	        var attrValue = node.attributes['style:width'] && node.attributes['style:width'].value;
 	        if (attrValue) {
-	            var size = (0, _getSize2['default'])(attrValue);
+	            var size = (0, _getSize2.default)(attrValue);
 	            if (size.unit) {
 	                result.style.width = size;
 	            }
@@ -963,26 +909,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return result;
-	};
-
-	;
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseTableColumnProperties;
 
 	var _getSize = __webpack_require__(7);
 
 	var _getSize2 = _interopRequireDefault(_getSize);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 *
@@ -990,15 +934,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {Object}
 	 * @private
 	 */
-
-	exports['default'] = function (node) {
+	function parseTableColumnProperties(node) {
 	    var result = {
 	        style: {}
 	    };
 
 	    if (node) {
 	        var attr = node.attributes['style:column-width'];
-	        var size = attr && (0, _getSize2['default'])(attr.value);
+	        var size = attr && (0, _getSize2.default)(attr.value);
 
 	        if (size && size.unit) {
 	            result.style.width = size;
@@ -1006,22 +949,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return result;
-	};
-
-	;
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseTableCellProperties;
 
 	var _JsFile = __webpack_require__(1);
 
@@ -1031,11 +970,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getSize2 = _interopRequireDefault(_getSize);
 
-	var _parseBorderStyle = __webpack_require__(13);
+	var _parseBorderStyle = __webpack_require__(12);
 
 	var _parseBorderStyle2 = _interopRequireDefault(_parseBorderStyle);
 
-	var formatPropertyName = _JsFile2['default'].Engine.formatPropertyName;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _JsFile$Engine = _JsFile2.default.Engine;
+	var merge = _JsFile$Engine.merge;
+	var formatPropertyName = _JsFile$Engine.formatPropertyName;
 
 	/**
 	 *
@@ -1044,7 +987,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 */
 
-	exports['default'] = function (node) {
+	function parseTableCellProperties(node) {
 	    var result = {
 	        style: {}
 	    };
@@ -1058,17 +1001,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var prop = name && formatPropertyName(name);
 
 	        if (prop.includes('border')) {
-	            var _ref = (0, _parseBorderStyle2['default'])(value) || {};
-
-	            var style = _ref.style;
-	            var width = _ref.width;
-	            var color = _ref.color;
-
-	            result.style[prop + 'Style'] = style;
-	            result.style[prop + 'Width'] = width;
-	            result.style[prop + 'Color'] = color;
+	            merge(result.style, (0, _parseBorderStyle2.default)(prop, value));
 	        } else if (prop === 'padding') {
-	            var size = value && (0, _getSize2['default'])(value);
+	            var size = value && (0, _getSize2.default)(value);
 	            if (size && size.unit) {
 	                result.style[prop] = size;
 	            }
@@ -1076,24 +1011,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	;
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseBorderStyle;
 
 	var _JsFile = __webpack_require__(1);
 
@@ -1103,90 +1034,97 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getSize2 = _interopRequireDefault(_getSize);
 
-	var normalizeColorValue = _JsFile2['default'].Engine.normalizeColorValue;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var normalizeColorValue = _JsFile2.default.Engine.normalizeColorValue;
 
 	/**
 	 *
-	 * @param data
+	 * @param prop {String}
+	 * @param value {String}
 	 * @return {Object}
 	 * @private
 	 */
 
-	exports['default'] = function (data) {
-	    var result = {
-	        width: {
-	            value: 0,
-	            unit: 'pt'
-	        },
-	        color: 'none',
-	        style: 'none'
-	    };
+	function parseBorderStyle(prop, value) {
+	    var result = {};
 
-	    if (data && data !== 'none') {
-	        var _data$split = data.split(' ');
+	    if (prop.includes('borderLine')) {
+	        return result;
+	    }
 
-	        var _data$split2 = _slicedToArray(_data$split, 3);
+	    if (value && value !== 'none') {
+	        var borderData = value.split(' ');
+	        var size = borderData[0] && (0, _getSize2.default)(borderData[0]);
 
-	        var sizeData = _data$split2[0];
-	        var style = _data$split2[1];
-	        var color = _data$split2[2];
+	        if (borderData.length !== 3 || !size.unit) {
+	            return result;
+	        }
+
+	        var _value$split = value.split(' ');
+
+	        var _value$split2 = _slicedToArray(_value$split, 3);
+
+	        var sizeData = _value$split2[0];
+	        var style = _value$split2[1];
+	        var color = _value$split2[2];
 
 	        if (sizeData && style && color) {
-	            var size = (0, _getSize2['default'])(sizeData);
+	            /**
+	             * @description minimal visible size for borders in inches
+	             * @type {number}
+	             */
+	            var minimalVisibleSize = 0.02;
 
-	            if (size.unit) {
-	                result.width = size;
+	            /**
+	             * Browser can't render too thin borders, as 0.0008in.
+	             * So, here is the normalization of border width if it's not a 0.
+	             */
+	            if (size.value && size.value < minimalVisibleSize) {
+	                size.value = minimalVisibleSize;
 	            }
 
-	            result.style = style;
-	            result.color = normalizeColorValue(color);
+	            result[prop + 'Width'] = size;
+	            result[prop + 'Style'] = borderData[1];
+	            result[prop + 'Color'] = normalizeColorValue(borderData[2]);
 	        }
 	    }
 
 	    return result;
-	};
-
-	;
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
-	/**
-	 *
-	 * @param node
-	 * @return {Object}
-	 * @private
-	 */
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	exports["default"] = function (node) {
+	exports.default = parseTableRowProperties;
+	/**
+	 * return {Object}
+	 * @private
+	 */
+	function parseTableRowProperties() {
 	    var result = {
 	        style: {}
 	    };
 
 	    return result;
-	};
-
-	;
-	module.exports = exports["default"];
+	}
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseParagraphProperties;
 
 	var _JsFile = __webpack_require__(1);
 
@@ -1196,7 +1134,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getSize2 = _interopRequireDefault(_getSize);
 
-	var _JsFile$Engine = _JsFile2['default'].Engine;
+	var _parseBorderStyle = __webpack_require__(12);
+
+	var _parseBorderStyle2 = _interopRequireDefault(_parseBorderStyle);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _JsFile$Engine = _JsFile2.default.Engine;
+	var merge = _JsFile$Engine.merge;
 	var formatPropertyName = _JsFile$Engine.formatPropertyName;
 	var normalizeColorValue = _JsFile$Engine.normalizeColorValue;
 
@@ -1207,7 +1152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 */
 
-	exports['default'] = function (node) {
+	function parseParagraphProperties(node) {
 	    var result = {
 	        style: {}
 	    };
@@ -1222,7 +1167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var size = undefined;
 
 	        if (prop.includes('padding') || prop.includes('margin')) {
-	            size = value && (0, _getSize2['default'])(value);
+	            size = value && (0, _getSize2.default)(value);
 
 	            if (size.unit) {
 	                result.style[prop] = size;
@@ -1230,28 +1175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if (prop === 'backgroundColor') {
 	            result.style[prop] = normalizeColorValue(value);
 	        } else if (prop.includes('border')) {
-	            var borderData = value.split(' ');
-	            size = borderData[0] && (0, _getSize2['default'])(borderData[0]);
-
-	            if (borderData.length === 3 && size.unit) {
-	                /**
-	                 * @description minimal visible size for borders in inches
-	                 * @type {number}
-	                 */
-	                var minimalVisibleSize = 0.02;
-
-	                /**
-	                 * Browser can't render too thin borders, as 0.0008in.
-	                 * So, here is the normalization of border width if it's not a 0.
-	                 */
-	                if (size.value && size.value < minimalVisibleSize) {
-	                    size.value = minimalVisibleSize;
-	                }
-
-	                result.style[prop + 'Width'] = size;
-	                result.style[prop + 'Style'] = borderData[1];
-	                result.style[prop + 'Color'] = normalizeColorValue(borderData[2]);
-	            }
+	            merge(result.style, (0, _parseBorderStyle2.default)(prop, value));
 	        } else if (prop === 'writingMode') {
 	            result.style.direction = /rl/i.test(value) ? 'rtl' : 'ltr';
 	        } else if (prop === 'textAlign') {
@@ -1264,21 +1188,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseTextProperties;
 
 	var _JsFile = __webpack_require__(1);
 
@@ -1288,7 +1209,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getSize2 = _interopRequireDefault(_getSize);
 
-	var _JsFile$Engine = _JsFile2['default'].Engine;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _JsFile$Engine = _JsFile2.default.Engine;
 	var formatPropertyName = _JsFile$Engine.formatPropertyName;
 	var normalizeColorValue = _JsFile$Engine.normalizeColorValue;
 
@@ -1299,7 +1222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 */
 
-	exports['default'] = function (node) {
+	function parseTextProperties(node) {
 	    var result = {
 	        style: {},
 	        properties: {}
@@ -1314,7 +1237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var prop = name && formatPropertyName(name);
 
 	        if (prop.includes('padding') || prop.includes('margin') || prop === 'fontSize') {
-	            var size = value && (0, _getSize2['default'])(value);
+	            var size = value && (0, _getSize2.default)(value);
 
 	            if (size && size.unit) {
 	                result.style[prop] = size;
@@ -1335,32 +1258,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseDocumentContent;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseDocumentElement = __webpack_require__(18);
+	var _parseDocumentElement = __webpack_require__(17);
 
 	var _parseDocumentElement2 = _interopRequireDefault(_parseDocumentElement);
 
-	var Document = _JsFile2['default'].Document;
-	var _JsFile$Engine = _JsFile2['default'].Engine;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Document = _JsFile2.default.Document;
+	var _JsFile$Engine = _JsFile2.default.Engine;
 	var invalidReadFile = _JsFile$Engine.errors.invalidReadFile;
 	var merge = _JsFile$Engine.merge;
 
@@ -1378,7 +1300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 
-	exports['default'] = function (params) {
+	function parseDocumentContent(params) {
 	    return new Promise(function (resolve, reject) {
 	        var xml = params.xml;
 	        var documentData = params.documentData;
@@ -1396,8 +1318,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            content: [],
 	            styles: documentData.styles.computed
 	        };
-	        var _documentData$styles$pageLayout = documentData.styles.pageLayout;
-	        var pageLayout = _documentData$styles$pageLayout === undefined ? {} : _documentData$styles$pageLayout;
+	        var _documentData$styles$ = documentData.styles.pageLayout;
+	        var pageLayout = _documentData$styles$ === undefined ? {} : _documentData$styles$;
 	        var _pageLayout$page = pageLayout.page;
 	        var pageProperties = _pageLayout$page === undefined ? {} : _pageLayout$page;
 
@@ -1408,7 +1330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var page = Document.elementPrototype;
 	                setPageProperties(page, pageProperties);
 	                [].forEach.call(node && node.childNodes || [], function (node) {
-	                    var el = (0, _parseDocumentElement2['default'])({
+	                    var el = (0, _parseDocumentElement2.default)({
 	                        node: node,
 	                        documentData: documentData
 	                    });
@@ -1430,53 +1352,51 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        resolve(result);
 	    });
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _parseParagraph = __webpack_require__(19);
+	var _parseParagraph = __webpack_require__(18);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
-	var _parseList = __webpack_require__(20);
+	var _parseList = __webpack_require__(19);
 
 	var _parseList2 = _interopRequireDefault(_parseList);
 
-	var _parseTable = __webpack_require__(21);
+	var _parseTable = __webpack_require__(20);
 
 	var _parseTable2 = _interopRequireDefault(_parseTable);
 
-	var _parseTableOfContent = __webpack_require__(22);
+	var _parseTableOfContent = __webpack_require__(21);
 
 	var _parseTableOfContent2 = _interopRequireDefault(_parseTableOfContent);
 
-	var _parseHeading = __webpack_require__(23);
+	var _parseHeading = __webpack_require__(22);
 
 	var _parseHeading2 = _interopRequireDefault(_parseHeading);
 
-	var _parseSection = __webpack_require__(24);
+	var _parseSection = __webpack_require__(23);
 
 	var _parseSection2 = _interopRequireDefault(_parseSection);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var parsers = {
-	    p: _parseParagraph2['default'],
-	    h: _parseHeading2['default'],
-	    list: _parseList2['default'],
-	    table: _parseTable2['default'],
-	    section: _parseSection2['default'],
-	    'table-of-content': _parseTableOfContent2['default']
+	    p: _parseParagraph2.default,
+	    h: _parseHeading2.default,
+	    list: _parseList2.default,
+	    table: _parseTable2.default,
+	    section: _parseSection2.default,
+	    'table-of-content': _parseTableOfContent2.default
 	};
 
 	function parseDocumentElement(params) {
@@ -1489,20 +1409,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return parser(params);
 	}
 
-	exports['default'] = parseDocumentElement;
-	module.exports = exports['default'];
+	exports.default = parseDocumentElement;
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseParagraph;
 
 	var _JsFile = __webpack_require__(1);
 
@@ -1512,10 +1430,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getSize2 = _interopRequireDefault(_getSize);
 
-	var Document = _JsFile2['default'].Document;
-	var tabAsSpaces = _JsFile2['default'].Engine.tabAsSpaces;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports['default'] = function (params) {
+	var Document = _JsFile2.default.Document;
+	var tabAsSpaces = _JsFile2.default.Engine.tabAsSpaces;
+	function parseParagraph(params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
 	    var documentData = params.documentData;
@@ -1599,7 +1518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                        attrValue = attributes['svg:x'] && attributes['svg:x'].value;
 	                        if (attrValue) {
-	                            size = (0, _getSize2['default'])(attrValue);
+	                            size = (0, _getSize2.default)(attrValue);
 
 	                            if (size.unit) {
 	                                el.style.left = size;
@@ -1610,7 +1529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                        attrValue = attributes['svg:y'] && attributes['svg:y'].value;
 	                        if (attrValue) {
-	                            size = (0, _getSize2['default'])(attrValue);
+	                            size = (0, _getSize2.default)(attrValue);
 
 	                            if (size.unit) {
 	                                el.style.top = size;
@@ -1619,7 +1538,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                        attrValue = attributes['svg:width'] && attributes['svg:width'].value;
 	                        if (attrValue) {
-	                            size = (0, _getSize2['default'])(attrValue);
+	                            size = (0, _getSize2.default)(attrValue);
 
 	                            if (size.unit) {
 	                                el.style.width = size;
@@ -1628,7 +1547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                        attrValue = attributes['svg:height'] && attributes['svg:height'].value;
 	                        if (attrValue) {
-	                            size = (0, _getSize2['default'])(attrValue);
+	                            size = (0, _getSize2.default)(attrValue);
 
 	                            if (size.unit) {
 	                                el.style.height = size;
@@ -1659,29 +1578,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseList;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var Document = _JsFile2['default'].Document;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports['default'] = function (params) {
+	var Document = _JsFile2.default.Document;
+	function parseList(params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
 	    var documentData = params.documentData;
@@ -1726,38 +1643,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseTable;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseParagraph = __webpack_require__(19);
+	var _parseParagraph = __webpack_require__(18);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
-	var Document = _JsFile2['default'].Document;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Document = _JsFile2.default.Document;
 
 	var arrProto = Array.prototype;
 	var push = arrProto.push;
 	var map = arrProto.map;
 	var forEach = arrProto.forEach;
 
-	exports['default'] = function (params) {
+	function parseTable(params) {
 	    var node = params.node;
 	    var documentData = params.documentData;
 
@@ -1795,7 +1711,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    result.children.push(thead, tbody);
 	    return result;
-	};
+	}
 
 	function parseTableRow(params) {
 	    var result = Document.elementPrototype;
@@ -1810,7 +1726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        el.properties.className = node.attributes['table:style-name'] && node.attributes['table:style-name'].value || '';
 	        el.properties.tagName = head ? 'TH' : 'TD';
 	        push.apply(el.children, map.call(node.querySelectorAll('p'), function (node) {
-	            return (0, _parseParagraph2['default'])({
+	            return (0, _parseParagraph2.default)({
 	                node: node,
 	                documentData: documentData
 	            });
@@ -1821,27 +1737,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return result;
 	}
-	module.exports = exports['default'];
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseTableOfContent;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var Document = _JsFile2['default'].Document;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports['default'] = function (params) {
+	var Document = _JsFile2.default.Document;
+	function parseTableOfContent(params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
 	    var documentData = params.documentData;
@@ -1879,33 +1794,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseHeading;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var _parseParagraph = __webpack_require__(19);
+	var _parseParagraph = __webpack_require__(18);
 
 	var _parseParagraph2 = _interopRequireDefault(_parseParagraph);
 
-	var Document = _JsFile2['default'].Document;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports['default'] = function (params) {
+	var Document = _JsFile2.default.Document;
+	function parseHeading(params) {
 	    var baseEl = Document.elementPrototype;
 	    var node = params.node;
 
@@ -1913,33 +1826,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return baseEl;
 	    }
 
-	    var el = (0, _parseParagraph2['default'])(params);
+	    var el = (0, _parseParagraph2.default)(params);
 	    el.properties.tagName = baseEl.properties.tagName;
 
 	    return el;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports.default = parseSection;
 
 	var _JsFile = __webpack_require__(1);
 
 	var _JsFile2 = _interopRequireDefault(_JsFile);
 
-	var Document = _JsFile2['default'].Document;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports['default'] = function (params) {
+	var Document = _JsFile2.default.Document;
+	function parseSection(params) {
 	    var result = Document.elementPrototype;
 	    var node = params.node;
 	    var documentData = params.documentData;
@@ -1957,9 +1868,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    return result;
-	};
-
-	module.exports = exports['default'];
+	}
 
 /***/ }
 /******/ ])

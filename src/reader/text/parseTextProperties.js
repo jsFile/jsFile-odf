@@ -8,7 +8,7 @@ const {formatPropertyName, normalizeColorValue} = JsFile.Engine;
  * @return {Object}
  * @private
  */
-export default function (node) {
+export default function parseTextProperties (node) {
     let result = {
         style: {},
         properties: {}

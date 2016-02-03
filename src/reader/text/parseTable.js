@@ -7,7 +7,7 @@ const push = arrProto.push;
 const map = arrProto.map;
 const forEach = arrProto.forEach;
 
-export default function (params) {
+export default function parseTable (params) {
     const {node, documentData} = params;
     const thead = Document.elementPrototype;
     const tbody = Document.elementPrototype;

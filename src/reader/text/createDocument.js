@@ -2,6 +2,7 @@ import JsFile from 'JsFile';
 import parseMetaInformation from './parseMetaInformation';
 import parseStyles from './parseStyles';
 import parseDocumentContent from './parseDocumentContent';
+
 const {Document} = JsFile;
 const {normalizeDataUri} = JsFile.Engine;
 
@@ -10,71 +11,69 @@ const {normalizeDataUri} = JsFile.Engine;
  * @param filesEntry {Array}
  * @private
  */
-export default function (filesEntry) {
-    return new Promise(function (resolve, reject) {
-        const domParser = new DOMParser();
-        let queue = [];
-        let document;
-        let documentData = {
-            documentInfo: {},
-            appInfo: {},
-            styles: {},
-            media: {}
-        };
+export default function createDocument (filesEntry) {
+    const domParser = new DOMParser();
+    const queue = [];
+    let document;
+    let documentData = {
+        documentInfo: {},
+        appInfo: {},
+        styles: {},
+        media: {}
+    };
 
-        filesEntry.forEach(fileEntry => {
-            let method;
-            const filename = fileEntry.entry.filename;
-            let isMediaSource;
+    filesEntry.forEach(fileEntry => {
+        let method;
+        const filename = fileEntry.entry.filename;
+        let isMediaSource;
 
-            if (!fileEntry.file) {
-                return;
-            }
+        if (!fileEntry.file) {
+            return;
+        }
 
-            isMediaSource = Boolean(filename && filename.includes('Pictures/'));
+        isMediaSource = Boolean(filename && filename.includes('Pictures/'));
+        if (isMediaSource) {
+            method = 'readAsDataURL';
+        }
+
+        const promise = this.readFileEntry({
+            file: fileEntry.file,
+            method
+        }).then((result) => {
+            let xml;
+
             if (isMediaSource) {
-                method = 'readAsDataURL';
+                documentData.media[filename] = normalizeDataUri(result, filename);
+            } else {
+                xml = domParser.parseFromString(result, 'application/xml');
+
+                if (filename.includes('styles.')) {
+                    return parseStyles(xml).then((styles) => documentData.styles = styles);
+                }
+
+                if (filename.includes('meta.')) {
+                    let info = parseMetaInformation(xml);
+                    documentData.documentInfo = info.documentInfo;
+                    documentData.appInfo = info.appInfo;
+                } else if (filename.includes('content.')) {
+                    document = xml;
+                }
             }
+        });
 
-            queue.push(new Promise(function (resolve, reject) {
-                this.readFileEntry({
-                    file: fileEntry.file,
-                    method
-                }).then((result) => {
-                    let xml;
+        queue.push(promise);
+    }, this);
 
-                    if (isMediaSource) {
-                        documentData.media[filename] = normalizeDataUri(result, filename);
-                        resolve();
-                    } else {
-                        xml = domParser.parseFromString(result, 'application/xml');
+    return Promise.all(queue).then(() => {
+        const promise = parseDocumentContent({
+            xml: document,
+            documentData: documentData,
+            fileName: this.fileName
+        }).then((result) => new Document(result));
 
-                        if (filename.includes('styles.')) {
-                            parseStyles(xml).then((styles) => documentData.styles = styles, reject);
-                        } else if (filename.includes('meta.')) {
-                            let info = parseMetaInformation(xml);
-                            documentData.documentInfo = info.documentInfo;
-                            documentData.appInfo = info.appInfo;
-                        } else if (filename.includes('content.')) {
-                            document = xml;
-                        }
+        documentData = null;
+        document = null;
 
-                        resolve();
-                    }
-                }, reject);
-            }.bind(this)));
-        }, this);
-
-        Promise.all(queue).then(function () {
-            parseDocumentContent({
-                xml: document,
-                documentData,
-                fileName: this.fileName
-            }).then((result) => {
-                resolve(new Document(result));
-            }, reject);
-
-            documentData = document = null;
-        }.bind(this), reject);
-    }.bind(this));
+        return promise;
+    });
 }

@@ -1,6 +1,7 @@
 import JsFile from 'JsFile';
 import getSize from './getSize';
-const {formatPropertyName, normalizeColorValue} = JsFile.Engine;
+import parseBorderStyle from './parseBorderStyle';
+const {merge, formatPropertyName, normalizeColorValue} = JsFile.Engine;
 
 /**
  *
@@ -8,8 +9,8 @@ const {formatPropertyName, normalizeColorValue} = JsFile.Engine;
  * @return {Object}
  * @private
  */
-export default function (node) {
-    let result = {
+export default function parseParagraphProperties (node) {
+    const result = {
         style: {}
     };
 
@@ -27,28 +28,7 @@ export default function (node) {
         } else if (prop === 'backgroundColor') {
             result.style[prop] = normalizeColorValue(value);
         } else if (prop.includes('border')) {
-            const borderData = value.split(' ');
-            size = borderData[0] && getSize(borderData[0]);
-
-            if (borderData.length === 3 && size.unit) {
-                /**
-                 * @description minimal visible size for borders in inches
-                 * @type {number}
-                 */
-                const minimalVisibleSize = 0.02;
-
-                /**
-                 * Browser can't render too thin borders, as 0.0008in.
-                 * So, here is the normalization of border width if it's not a 0.
-                 */
-                if (size.value && size.value < minimalVisibleSize) {
-                    size.value = minimalVisibleSize;
-                }
-
-                result.style[`${prop}Width`] = size;
-                result.style[`${prop}Style`] = borderData[1];
-                result.style[`${prop}Color`] = normalizeColorValue(borderData[2]);
-            }
+            merge(result.style, parseBorderStyle(prop, value));
         } else if (prop === 'writingMode') {
             result.style.direction = (/rl/i).test(value) ? 'rtl' : 'ltr';
         } else if (prop === 'textAlign') {

@@ -3,7 +3,7 @@ import getSize from './getSize';
 const {Document} = JsFile;
 const {tabAsSpaces} = JsFile.Engine;
 
-export default function (params) {
+export default function parseParagraph (params) {
     let result = Document.elementPrototype;
     const {node, documentData} = params;
     result.properties.tagName = 'P';

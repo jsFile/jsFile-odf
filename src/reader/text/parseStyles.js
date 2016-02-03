@@ -4,10 +4,10 @@ import parseStylesNode from './parseStylesNode';
 /**
  *
  * @param xml
- * @returns {*}
+ * @returns {Promise}
  * @private
  */
-export default (xml) => new Promise((resolve, reject) => {
+export default function parseStyles (xml) {
     let pageLayoutName;
     const layouts = {};
     let firstPageLayout = '';
@@ -31,8 +31,9 @@ export default (xml) => new Promise((resolve, reject) => {
     });
 
     const pageLayout = layouts[pageLayoutName] || layouts[firstPageLayout];
-    parseStylesNode(xml.querySelector('styles')).then((result) => {
+
+    return parseStylesNode(xml.querySelector('styles')).then((result) => {
         result.pageLayout = pageLayout;
-        resolve(result);
-    }, reject);
-});
+        return result;
+    });
+}

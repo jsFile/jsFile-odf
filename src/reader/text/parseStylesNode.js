@@ -1,11 +1,13 @@
 import JsFile from 'JsFile';
-import parseListProperties from './parseListProperties';
+
+//import parseListProperties from './parseListProperties';
 import parseTableProperties from './parseTableProperties';
 import parseTableColumnProperties from './parseTableColumnProperties';
 import parseTableCellProperties from './parseTableCellProperties';
 import parseTableRowProperties from './parseTableRowProperties';
 import parseParagraphProperties from './parseParagraphProperties';
 import parseTextProperties from './parseTextProperties';
+
 const {merge} = JsFile.Engine;
 const defaultStyleNodeName = 'default-style';
 const parsers = {
@@ -58,6 +60,7 @@ const parsers = {
         exec: parseTextProperties
     }
 };
+
 const forEach = [].forEach;
 
 function readNodes (i, length, nodes, result, resolve, reject) {
@@ -122,7 +125,7 @@ function readNodes (i, length, nodes, result, resolve, reject) {
     setTimeout(() => readNodes(i, length, nodes, result, resolve, reject));
 }
 
-export default function (node, result) {
+export default function parseStylesNode (node) {
     return new Promise((resolve, reject) => {
         const nodes = node && node.childNodes || [];
         const result = {
@@ -130,6 +133,7 @@ export default function (node, result) {
             named: {},
             computed: []
         };
+
         readNodes(0, nodes.length, nodes, result, resolve, reject);
     });
 }

@@ -6,7 +6,7 @@ import getSize from './getSize';
  * @return {Object}
  * @private
  */
-export default function (node) {
+export default function parseTableProperties (node) {
     let result = {
         style: {}
     };
@@ -27,4 +27,4 @@ export default function (node) {
     }
 
     return result;
-};
+}

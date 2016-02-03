@@ -1,7 +1,7 @@
 import JsFile from 'JsFile';
 const {Document} = JsFile;
 
-export default function (params) {
+export default function parseList (params) {
     const result = Document.elementPrototype;
     const {node, documentData, parseDocumentElement} = params;
     result.properties.tagName = 'UL';

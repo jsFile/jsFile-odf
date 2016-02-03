@@ -9,8 +9,8 @@ const masks = [
  * @returns {{value: number, unit: string}}
  * @private
  */
-export default function (val) {
-    let result = {
+export default function getSize (val) {
+    const result = {
         value: 0,
         unit: ''
     };
@@ -29,4 +29,4 @@ export default function (val) {
     }
 
     return result;
-};
+}

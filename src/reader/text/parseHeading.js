@@ -2,7 +2,7 @@ import JsFile from 'JsFile';
 import parseParagraph from './parseParagraph';
 const {Document} = JsFile;
 
-export default function (params) {
+export default function parseHeading (params) {
     let baseEl = Document.elementPrototype;
     const {node} = params;
 

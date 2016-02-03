@@ -1,7 +1,8 @@
-import {Engine, defineEngine} from 'JsFile';
+import JsFile from 'JsFile';
 import createDocument from './reader/createDocument';
-const {validateFile} = Engine;
 
+const {Engine, defineEngine} = JsFile;
+const {validateFile} = Engine;
 const fileTypes = {
     textFiles: {
         extension: ['odt'],
@@ -86,11 +87,12 @@ for (let k in fileTypes) {
 }
 
 class OdfEngine extends Engine {
-    createDocument = createDocument
-
-    parser = 'readArchive'
-
-    files = files
+    constructor () {
+        super(...arguments);
+        this.createDocument = createDocument;
+        this.parser = 'readArchive';
+        this.files = files;
+    }
 
     isTextFile () {
         return Boolean(this.file && validateFile(this.file, fileTypes.textFiles));
@@ -99,10 +101,9 @@ class OdfEngine extends Engine {
     static test (file) {
         return Boolean(file && validateFile(file, files));
     }
-
-    static mimeTypes = files.mime.slice(0)
 }
 
+OdfEngine.mimeTypes = files.mime.slice(0);
 defineEngine(OdfEngine);
 
 export default OdfEngine;

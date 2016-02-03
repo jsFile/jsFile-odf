@@ -8,7 +8,7 @@ const {formatPropertyName, normalizeColorValue} = JsFile.Engine;
  * @return {Object}
  * @private
  */
-export default function (node) {
+export default function parsePageLayoutStyles (node) {
     const result = {
         page: {
             style: {},
@@ -133,4 +133,4 @@ export default function (node) {
     }
 
     return result;
-};
+}

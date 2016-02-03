@@ -14,7 +14,7 @@ function setPageProperties (page, {style, properties}) {
     }
 }
 
-export default function (params) {
+export default function parseDocumentContent (params) {
     return new Promise((resolve, reject) => {
         const {xml, documentData, fileName} = params;
         if (!xml || !documentData) {

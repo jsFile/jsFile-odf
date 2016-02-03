@@ -1,7 +1,7 @@
 import JsFile from 'JsFile';
 import getSize from './getSize';
 import parseBorderStyle from './parseBorderStyle';
-const {formatPropertyName} = JsFile.Engine;
+const {merge, formatPropertyName} = JsFile.Engine;
 
 /**
  *
@@ -9,7 +9,7 @@ const {formatPropertyName} = JsFile.Engine;
  * @return {Object}
  * @private
  */
-export default function (node) {
+export default function parseTableCellProperties (node) {
     let result = {
         style: {}
     };
@@ -19,10 +19,7 @@ export default function (node) {
         const prop = name && formatPropertyName(name);
 
         if (prop.includes('border')) {
-            const {style, width, color} = parseBorderStyle(value) || {};
-            result.style[prop + 'Style'] = style;
-            result.style[prop + 'Width'] = width;
-            result.style[prop + 'Color'] = color;
+            merge(result.style, parseBorderStyle(prop, value));
         } else if (prop === 'padding') {
             const size = value && getSize(value);
             if (size && size.unit) {
@@ -32,4 +29,4 @@ export default function (node) {
     });
 
     return result;
-};
+}

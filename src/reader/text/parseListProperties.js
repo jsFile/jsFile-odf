@@ -6,7 +6,7 @@ const listStyleTypes = {
     A: 'upper-alpha'
 };
 
-export default function (xml) {
+export default function parseListProperties (xml) {
     const result = {
         style: {}
     };
@@ -22,4 +22,4 @@ export default function (xml) {
     }
 
     return result;
-};
+}

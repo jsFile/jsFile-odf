@@ -1,10 +1,10 @@
-module.exports = function () {
+module.exports = function (grunt) {
     return {
         main: {
             options: {
                 target: 'global'
             },
-            src: ['tests/files/**/07-08-22-MetaData-Examples.*'],
+            src: ['tests/files/**/*.*'],
             dest: 'tests/filesCache.js'
         }
     };
