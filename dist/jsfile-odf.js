@@ -56,11 +56,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _JsFile = __webpack_require__(1);
 
@@ -79,7 +79,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Engine = _JsFile2.default.Engine;
-	var defineEngine = _JsFile2.default.defineEngine;
 	var validateFile = Engine.validateFile;
 
 	var fileTypes = {
@@ -195,7 +194,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(Engine);
 
 	OdfEngine.mimeTypes = files.mime.slice(0);
-	defineEngine(OdfEngine);
 
 	exports.default = OdfEngine;
 
@@ -756,6 +754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return 'p' + className;
 	        },
 
+
 	        exec: _parseParagraphProperties2.default
 	    },
 	    'text-properties': {
@@ -769,6 +768,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            return 'span' + className + ', ' + (className || 'p') + ' span';
 	        },
+
 
 	        exec: _parseTextProperties2.default
 	    }
@@ -789,6 +789,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = nodes[i];
 	        var localName = node.localName;
 	        var attributes = node.attributes;
+
 
 	        if (localName === 'style' || localName === defaultStyleNodeName) {
 	            (function () {
@@ -1019,11 +1020,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 	exports.default = parseBorderStyle;
 
 	var _JsFile = __webpack_require__(1);
@@ -1068,6 +1070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sizeData = _value$split2[0];
 	        var style = _value$split2[1];
 	        var color = _value$split2[2];
+
 
 	        if (sizeData && style && color) {
 	            /**
@@ -1286,6 +1289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var invalidReadFile = _JsFile$Engine.errors.invalidReadFile;
 	var merge = _JsFile$Engine.merge;
 
+
 	function setPageProperties(page, _ref) {
 	    var style = _ref.style;
 	    var properties = _ref.properties;
@@ -1496,6 +1500,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                [].forEach.call(node && node.childNodes || [], function (child) {
 	                    var localName = child.localName;
+
 
 	                    if (localName === 'tab') {
 	                        el.properties.textContent += tabAsSpaces;
@@ -1719,6 +1724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var documentData = params.documentData;
 	    var head = params.head;
 
+
 	    result.properties.tagName = 'TR';
 	    push.apply(result.children, map.call(node.querySelectorAll('table-cell'), function (node) {
 	        var el = Document.elementPrototype;
@@ -1822,6 +1828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var baseEl = Document.elementPrototype;
 	    var node = params.node;
 
+
 	    if (!node) {
 	        return baseEl;
 	    }
@@ -1855,6 +1862,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var node = params.node;
 	    var documentData = params.documentData;
 	    var parseDocumentElement = params.parseDocumentElement;
+
 
 	    [].forEach.call(node.childNodes || [], function (node) {
 	        var child = parseDocumentElement({

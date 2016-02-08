@@ -13,10 +13,7 @@ describe('jsFile-odf', () => {
 
     before(() => {
         files = window.files;
-    });
-
-    it('should exist', () => {
-        assert.isFunction(OdfEngine);
+        JsFile.defineEngine(OdfEngine);
     });
 
     it('should have files for testing', () => {

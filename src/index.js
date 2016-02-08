@@ -1,7 +1,7 @@
 import JsFile from 'JsFile';
 import createDocument from './reader/createDocument';
 
-const {Engine, defineEngine} = JsFile;
+const {Engine} = JsFile;
 const {validateFile} = Engine;
 const fileTypes = {
     textFiles: {
@@ -104,6 +104,5 @@ class OdfEngine extends Engine {
 }
 
 OdfEngine.mimeTypes = files.mime.slice(0);
-defineEngine(OdfEngine);
 
 export default OdfEngine;
