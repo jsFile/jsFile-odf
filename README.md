@@ -1,5 +1,9 @@
 # jsFile-odf [![Build Status](https://secure.travis-ci.org/jsFile/jsFile-odf.png?branch=master)](https://travis-ci.org/jsFile/jsFile-odf) [![Coverage Status](https://coveralls.io/repos/jsFile/jsFile-odf/badge.svg?branch=master&service=github)](https://coveralls.io/github/jsFile/jsFile-odf?branch=master)
+
 Engine for jsFile library to work with documents in [ODF](https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office) format (.odf, etc.)
+
+> ### :warning: This project is deprecated in favour of https://github.com/file2html/file2html
+
 
 ## Installation
 ### via NPM
